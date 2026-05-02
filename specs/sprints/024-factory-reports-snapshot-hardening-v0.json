@@ -1,0 +1,91 @@
+{
+  "id": "sprint-024-factory-reports-snapshot-hardening-v0",
+  "title": "Factory Reports & Snapshot Hardening V0",
+  "status": "planned",
+  "goal": "Reduzir ruído de reports, centralizar seleção do report mais recente e endurecer o snapshot imediato do workspace sem apagar histórico e sem executar Codex live.",
+  "features": [
+    {
+      "id": "feat-factory-reports-024-001",
+      "title": "Criar report selector V0 local",
+      "status": "planned",
+      "files": [
+        "app/report_index.py",
+        "app/execution_evaluator.py",
+        "app/factory_start.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "lista reports por tipo usando diretório conhecido",
+        "ignora stdout, stderr, temporários e JSON inválido",
+        "filtra por run_id quando aplicável",
+        "retorna o report mais recente e válido"
+      ]
+    },
+    {
+      "id": "feat-factory-reports-024-002",
+      "title": "Endurecer snapshot do workspace após prepare",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py"
+      ],
+      "acceptanceCriteria": [
+        "prepare grava workspace_kind, workspace_branch, workspace_state, workspace_head e main_head",
+        "status e readiness expõem expected_main_head e expected_workspace_head",
+        "drift após prepare não retorna ready falso",
+        "sync review fica com razão clara"
+      ]
+    },
+    {
+      "id": "feat-factory-reports-024-003",
+      "title": "Atualizar painel read-only e documentação",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "specs/discovery/reuse-first-factory-reports-snapshot-hardening-v0.md",
+        "specs/prd/factory-reports-snapshot-hardening-v0-prd.md",
+        "specs/technical-spec/factory-reports-snapshot-hardening-v0.md",
+        "specs/sprints/024-factory-reports-snapshot-hardening-v0.json",
+        "reports/factory-reports-snapshot-hardening-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "painel continua read-only",
+        "retention fica documentada sem delete",
+        "proof registra selectors, snapshot e riscos"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/024-factory-reports-snapshot-hardening-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli report-latest factory-starts",
+    ".venv/bin/python -m app.cli report-list factory-loops --limit 5",
+    ".venv/bin/python -m app.cli report-latest execution-evaluations",
+    ".venv/bin/python -m app.cli run-workspace-prepare <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-status <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <RUN_ID>",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "snapshot pode indicar drift real entre prepare e leitura",
+    "seleção errada de report pode contaminar decisões do evaluator",
+    "retenção continua crescendo até futura política de limpeza"
+  ],
+  "out_of_scope": [
+    "deletar reports",
+    "compactar histórico",
+    "daemon",
+    "scheduler",
+    "live",
+    "push",
+    "deploy",
+    "API paga",
+    "secrets"
+  ]
+}

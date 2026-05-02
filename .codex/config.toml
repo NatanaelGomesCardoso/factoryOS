@@ -1,0 +1,54 @@
+# FactoryOS repo-local Codex config
+# Objetivo: execução leve por padrão dentro deste repo, sem segredo.
+# FactoryOS deve preferir comandos gerados com --ignore-user-config e --ephemeral.
+# Esta config local é apenas fallback humano; a fábrica não depende dela.
+
+profile = "factoryos-lite-default"
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"
+model_reasoning_summary = "none"
+model_verbosity = "low"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+project_doc_max_bytes = 4096
+
+[profiles.factoryos-lite-default]
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"
+model_reasoning_summary = "none"
+model_verbosity = "low"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+project_doc_max_bytes = 4096
+
+[profiles.factoryos-mini-medium]
+model = "gpt-5.4-mini"
+model_reasoning_effort = "medium"
+model_reasoning_summary = "none"
+model_verbosity = "low"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+project_doc_max_bytes = 8192
+
+[profiles.factoryos-standard-medium]
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+model_reasoning_summary = "none"
+model_verbosity = "medium"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+project_doc_max_bytes = 16384
+
+[profiles.factoryos-heavy-review]
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+model_reasoning_summary = "auto"
+model_verbosity = "medium"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+project_doc_max_bytes = 32768

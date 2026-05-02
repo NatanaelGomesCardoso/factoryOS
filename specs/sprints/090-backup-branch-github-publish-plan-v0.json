@@ -1,0 +1,77 @@
+{
+  "id": "sprint-090-backup-branch-github-publish-plan-v0",
+  "title": "Backup Branch + GitHub Publish Plan V0",
+  "objective": "Preparar plano seguro de backup, release limpo e publicacao GitHub sem executar push.",
+  "status": "implemented",
+  "constraints": {
+    "dry_run_only": true,
+    "no_push": true,
+    "no_pull_fetch_rebase": true,
+    "no_branch_or_tag_mutation": true,
+    "no_remote_creation": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "human_review_required": true
+  },
+  "commands": [
+    "github-backup-plan --dry-run",
+    "github-publish-plan --dry-run",
+    "github-release-checklist --dry-run"
+  ],
+  "artifacts": [
+    "app/github_publish_plan.py",
+    "app/cli.py",
+    "github-backup-plan",
+    "github-publish-plan",
+    "github-release-checklist",
+    "docs/github-backup-publish-plan.md",
+    "specs/sprints/090-backup-branch-github-publish-plan-v0.json",
+    "reports/github-publish-plans/<timestamp>.json",
+    "reports/backup-branch-github-publish-plan-v0-proof.txt"
+  ],
+  "required_fields": [
+    "ok",
+    "dry_run",
+    "backup_branch",
+    "backup_tag",
+    "clean_export_path",
+    "publish_target",
+    "safe_to_push",
+    "push_allowed",
+    "human_review_required",
+    "commands_preview",
+    "blockers",
+    "warnings",
+    "no_push",
+    "no_deploy",
+    "no_paid_api",
+    "no_secrets",
+    "report_path"
+  ],
+  "expected_values": {
+    "backup_branch": "backup/factoryos-full-history-v1",
+    "backup_tag": "factoryos-v1-full-history",
+    "clean_export_path": "<FACTORYOS_CLEAN_EXPORT>",
+    "publish_target": "github-clean-export-v1",
+    "safe_to_push": false,
+    "push_allowed": false,
+    "human_review_required": true
+  },
+  "validation_plan": [
+    "github-backup-plan --dry-run > <TMP_DIR>",
+    "github-publish-plan --dry-run > <TMP_DIR>",
+    "github-release-checklist --dry-run > <TMP_DIR>",
+    "help-docs-check --dry-run > <TMP_DIR>",
+    "public-repo-readiness-gate --dry-run > <TMP_DIR>",
+    "py_compile",
+    "compileall > <TMP_DIR>",
+    "TestClient GET / = 200",
+    "TestClient GET /help = 200",
+    "git diff --check",
+    "harness global-doctor --strict > <TMP_DIR>",
+    "harness doctor --source-root <HARNESS_ROOT> --strict > <TMP_DIR>",
+    "harness security-doctor --source-root <FACTORYOS_ROOT> --strict > <TMP_DIR>"
+  ],
+  "report_path": "reports/backup-branch-github-publish-plan-v0-proof.txt"
+}

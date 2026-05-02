@@ -1,0 +1,582 @@
+{% extends "base.html" %}
+
+{% block title %}FactoryOS | Painel local{% endblock %}
+
+{% block content %}
+<header class="command-hero" id="top">
+  <div class="command-copy">
+    <p class="brand">FactoryOS</p>
+    <h1>Factory Command Center</h1>
+    <p class="lead">
+      Visao local e read-only da fabrica: estado operacional, fila, runs, gates e evidencias para fechar o proximo corte com seguranca.
+    </p>
+    <div class="notice" role="note">
+      {{ snapshot.read_only_notice }}: leitura local, sem executar Codex, push ou deploy.
+    </div>
+    <div class="release-lock" aria-label="Estado de publicacao">
+      <span class="status-pill status-blocked">Release bloqueado</span>
+      <span>Publicacao depende do release clean e gate final.</span>
+    </div>
+    <div class="hero-actions" aria-label="Acoes read-only do painel">
+      <a class="button-link" href="#next-steps">Proximo passo</a>
+      <a class="button-link secondary-action" href="#evidence">Evidencias</a>
+      <a class="button-link secondary-action" href="#security-gates">Gates humanos</a>
+    </div>
+  </div>
+
+  <aside class="status-card command-status">
+    <h2>Estado local</h2>
+    <dl>
+      <div>
+        <dt>Branch</dt>
+        <dd>{{ snapshot.branch }}</dd>
+      </div>
+      <div>
+        <dt>Atualizado</dt>
+        <dd>{{ snapshot.generated_at }}</dd>
+      </div>
+      <div>
+        <dt>Modo</dt>
+        <dd>Read-only</dd>
+      </div>
+      <div>
+        <dt>Acao segura</dt>
+        <dd>abrir reports</dd>
+      </div>
+    </dl>
+  </aside>
+</header>
+
+<nav class="section-nav" aria-label="Navegacao do painel">
+  <a href="#factory-state">Fabrica</a>
+  <a href="#current-project">Projeto</a>
+  <a href="#project-flow">Fluxo</a>
+  <a href="#task-queue">Fila</a>
+  <a href="#runs-capsules">Runs</a>
+  <a href="#evidence">Evidencias</a>
+  <a href="#security-gates">Gates</a>
+  <a href="#next-steps">Proximos passos</a>
+  <a href="{{ url_for('help_index') }}">Ajuda</a>
+</nav>
+
+<section class="metrics" aria-label="Resumo operacional">
+  <article class="metric">
+    <span class="metric-label">Projetos</span>
+    <strong>{{ snapshot.projects | length }}</strong>
+    <span class="metric-hint">workspaces locais</span>
+  </article>
+  <article class="metric">
+    <span class="metric-label">Tasks</span>
+    <strong>{{ snapshot.task_queue | sum(attribute='count') }}</strong>
+    <span class="metric-hint">fila total</span>
+  </article>
+  <article class="metric">
+    <span class="metric-label">Reports</span>
+    <strong>{{ snapshot.reports | length }}</strong>
+    <span class="metric-hint">evidencias recentes</span>
+  </article>
+  <article class="metric">
+    <span class="metric-label">Docs</span>
+    <strong>{{ snapshot.docs | length }}</strong>
+    <span class="metric-hint">referencias locais</span>
+  </article>
+  <article class="metric metric-wide">
+    <span class="metric-label">Gate final</span>
+    <strong>hold</strong>
+    <span class="metric-hint">release clean pendente</span>
+  </article>
+</section>
+
+<main class="dashboard-flow">
+  <section class="dashboard-section" id="factory-state" aria-labelledby="factory-state-title">
+    <div class="section-heading">
+      <p class="eyebrow">Estado da fabrica</p>
+      <h2 id="factory-state-title">Operacao atual</h2>
+      <p class="section-subtitle">Sinais de higiene, factory start e tick mais recentes para decidir se o painel esta pronto para o proximo corte.</p>
+    </div>
+
+    <div class="ops-grid">
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div>
+            <p class="eyebrow">Hygiene</p>
+            <h3>Factory State Hygiene</h3>
+          </div>
+          <span class="status-pill status-{{ snapshot.latest_state_hygiene.kind }}">{{ snapshot.latest_state_hygiene.kind }}</span>
+        </div>
+        {% if snapshot.latest_state_hygiene.available %}
+        <div class="signal-grid">
+          <div><span class="metric-label">Running tasks</span><strong>{{ snapshot.latest_state_hygiene.running_tasks_count }}</strong></div>
+          <div><span class="metric-label">Running runs</span><strong>{{ snapshot.latest_state_hygiene.running_runs_count }}</strong></div>
+          <div><span class="metric-label">Safe to close</span><strong>{{ snapshot.latest_state_hygiene.safe_to_close_count }}</strong></div>
+          <div><span class="metric-label">Needs review</span><strong>{{ snapshot.latest_state_hygiene.needs_review_count }}</strong></div>
+        </div>
+        <p class="metric-path">{{ snapshot.latest_state_hygiene.report_path }}</p>
+        {% if snapshot.latest_state_hygiene.view_path %}
+        <a class="file-view-link" aria-label="Abrir report de hygiene em modo read-only" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_state_hygiene.view_path) }}">Abrir report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum report valido de higiene encontrado. Rode o check de higiene fora do painel para preencher este sinal.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div>
+            <p class="eyebrow">Factory Start</p>
+            <h3>Ultimo start</h3>
+          </div>
+          <span class="status-pill status-{{ snapshot.latest_factory_start.final_status }}">{{ snapshot.latest_factory_start.final_status }}</span>
+        </div>
+        {% if snapshot.latest_factory_start.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Status</p><p class="metric-value">{{ snapshot.latest_factory_start.status }}</p></div>
+          <div><p class="metric-label">Decisao final</p><p class="metric-value">{{ snapshot.latest_factory_start.final_decision }}</p></div>
+          <div><p class="metric-label">Steps</p><p class="metric-value">{{ snapshot.latest_factory_start.steps_completed }}/{{ snapshot.latest_factory_start.max_steps }}</p></div>
+          <div><p class="metric-label">Live</p><p class="metric-value">{{ snapshot.latest_factory_start.executed_live }}</p></div>
+        </div>
+        {% if snapshot.latest_factory_start.view_path %}
+        <a class="file-view-link" aria-label="Abrir report do ultimo Factory Start em modo read-only" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_factory_start.view_path) }}">Abrir report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum Factory Start valido. Quando existir um start, este card mostra decisao final, steps e report.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div>
+            <p class="eyebrow">Factory Tick</p>
+            <h3>Ultimo tick</h3>
+          </div>
+          <span class="status-pill status-{{ snapshot.latest_factory_tick.status }}">{{ snapshot.latest_factory_tick.status }}</span>
+        </div>
+        {% if snapshot.latest_factory_tick.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Run</p><p class="metric-value">{{ snapshot.latest_factory_tick.run_id }}</p></div>
+          <div><p class="metric-label">Mode</p><p class="metric-value">{{ snapshot.latest_factory_tick.mode }}</p></div>
+          <div><p class="metric-label">Readiness</p><p class="metric-value">{{ (snapshot.latest_factory_tick.readiness_status or 'n/d') | replace('_', ' ') }}</p></div>
+          <div><p class="metric-label">Live futuro</p><p class="metric-value">{{ snapshot.latest_factory_tick.decision_can_continue_to_live_future }}</p></div>
+        </div>
+        <p class="next-step">{{ snapshot.latest_factory_tick.decision_next_recommended_action }}</p>
+        {% if snapshot.latest_factory_tick.view_path %}
+        <a class="file-view-link" aria-label="Abrir report do ultimo Factory Tick em modo read-only" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_factory_tick.view_path) }}">Abrir report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum Factory Tick valido. O proximo tick aparecera aqui com readiness e recomendacao.</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="current-project" aria-labelledby="current-project-title">
+    <div class="section-heading">
+      <p class="eyebrow">Projeto atual</p>
+      <h2 id="current-project-title">Projetos detectados</h2>
+      <p class="section-subtitle">Workspaces em workspaces/projects com backend e frontend separados. Links continuam somente leitura.</p>
+    </div>
+
+    {% if snapshot.projects %}
+    <div class="project-grid">
+      {% for project in snapshot.projects %}
+      <article class="project-card">
+        <div class="project-card-top">
+          <div>
+            <p class="metric-label">Projeto</p>
+            <h3>{{ project.project_name }}</h3>
+          </div>
+          <span class="status-pill status-{{ project.status }}">{{ project.status }}</span>
+        </div>
+        <p class="project-path">{{ project.workspace_relative_path }}</p>
+        <div class="project-meta-grid">
+          <div><span class="metric-label">Tipo</span><strong>{{ project.kind }}</strong></div>
+          <div><span class="metric-label">Template</span><strong>{{ project.template_id or 'n/d' }}</strong></div>
+          <div><span class="metric-label">Backend</span><strong>{{ 'required' if project.backend_required else 'optional' }}</strong></div>
+          <div><span class="metric-label">Frontend</span><strong>{{ 'required' if project.frontend_required else 'optional' }}</strong></div>
+        </div>
+        {% if project.notes %}
+        <div class="project-notes">
+          <p class="metric-label">Notas</p>
+          <ul class="compact-list">
+            {% for note in project.notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        <div class="project-reports">
+          <p class="metric-label">Reports do projeto</p>
+          <ul class="inline-report-list">
+            {% for label, report in {
+              'Intake': project.latest_reports.intake,
+              'Build': project.latest_reports.build_plan,
+              'Canary': project.latest_reports.capsule_canary,
+              'Apply': project.latest_reports.apply_plan,
+              'Evaluator': project.latest_reports.evaluator
+            }.items() %}
+            <li>
+              <span>{{ label }}</span>
+              {% if report %}
+              <a class="file-view-link" aria-label="Abrir report {{ label }} em modo read-only" href="{{ url_for('view_file', area='reports', file_path=report.view_path) }}">Abrir</a>
+              {% else %}
+              <span class="muted-token">n/d</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <p class="project-next">Proximo passo: revisar o report mais recente e manter gates humanos antes de apply/release.</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty state-empty">Nenhum workspace de projeto detectado. Quando houver projeto piloto, ele aparece aqui com reports, gates relacionados e proximo passo operacional.</p>
+    {% endif %}
+  </section>
+
+  <section class="dashboard-section" id="project-flow" aria-labelledby="project-flow-title">
+    <div class="section-heading">
+      <p class="eyebrow">Fluxo de projeto</p>
+      <h2 id="project-flow-title">Do intake ao release</h2>
+      <p class="section-subtitle">Trilha visual para entender onde um MVP esta, quais pontos sao automacao local e quais exigem revisao humana.</p>
+    </div>
+
+    <ol class="flow-rail" aria-label="Fluxo operacional de projeto">
+      <li class="flow-step flow-auto">
+        <span class="flow-index">01</span>
+        <strong>Intake</strong>
+        <span>entrada do pedido</span>
+        <em>local</em>
+      </li>
+      <li class="flow-step flow-human">
+        <span class="flow-index">02</span>
+        <strong>PRD</strong>
+        <span>clareza de produto</span>
+        <em>revisao</em>
+      </li>
+      <li class="flow-step flow-human">
+        <span class="flow-index">03</span>
+        <strong>SPEC</strong>
+        <span>contrato tecnico</span>
+        <em>revisao</em>
+      </li>
+      <li class="flow-step flow-auto">
+        <span class="flow-index">04</span>
+        <strong>Build Plan</strong>
+        <span>plano seco</span>
+        <em>dry-run</em>
+      </li>
+      <li class="flow-step flow-human">
+        <span class="flow-index">05</span>
+        <strong>Capsule Canary</strong>
+        <span>canario isolado</span>
+        <em>gate</em>
+      </li>
+      <li class="flow-step flow-human">
+        <span class="flow-index">06</span>
+        <strong>Apply Gate</strong>
+        <span>aprovar aplicacao</span>
+        <em>humano</em>
+      </li>
+      <li class="flow-step flow-auto">
+        <span class="flow-index">07</span>
+        <strong>Workspace</strong>
+        <span>backend/frontend</span>
+        <em>local</em>
+      </li>
+      <li class="flow-step flow-auto">
+        <span class="flow-index">08</span>
+        <strong>Evaluator</strong>
+        <span>validacao</span>
+        <em>check</em>
+      </li>
+      <li class="flow-step flow-human">
+        <span class="flow-index">09</span>
+        <strong>Delivery</strong>
+        <span>pacote final</span>
+        <em>revisao</em>
+      </li>
+      <li class="flow-step flow-auto">
+        <span class="flow-index">10</span>
+        <strong>Obsidian</strong>
+        <span>memoria curta</span>
+        <em>sync</em>
+      </li>
+      <li class="flow-step flow-blocked">
+        <span class="flow-index">11</span>
+        <strong>Release</strong>
+        <span>clean/publicacao</span>
+        <em>bloqueado</em>
+      </li>
+    </ol>
+
+    <div class="flow-summary">
+      <article class="panel flow-note">
+        <p class="metric-label">Automatico local</p>
+        <p>Leitura, dry-run, scaffold e avaliacao aparecem como evidencias. O painel nao executa essas etapas.</p>
+      </article>
+      <article class="panel flow-note">
+        <p class="metric-label">Gate humano</p>
+        <p>PRD, SPEC, canary, apply, delivery e release exigem revisao antes de qualquer avanço sensivel.</p>
+      </article>
+      <article class="panel flow-note">
+        <p class="metric-label">Agora</p>
+        <p>{{ snapshot.next_step }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="task-queue" aria-labelledby="task-queue-title">
+    <div class="section-heading">
+      <p class="eyebrow">Tasks / fila</p>
+      <h2 id="task-queue-title">Fila operacional</h2>
+      <p class="section-subtitle">Leitura local das pastas em tasks/. Cards mostram contagem, risco e executor sem alterar status.</p>
+    </div>
+
+    <div class="task-grid">
+      {% for group in snapshot.task_queue %}
+      <article class="task-card task-card-{{ group.key }}">
+        <div class="task-card-top">
+          <span class="task-label">{{ group.label }}</span>
+          <strong>{{ group.count }}</strong>
+        </div>
+        <p>{{ group.description }}</p>
+        {% if group.files %}
+        <ul class="task-file-list">
+          {% for file in group.files %}
+          <li class="task-file-item">
+            <div class="task-file-head">
+              <strong class="task-file-title">{{ file.title or file.name }}</strong>
+              {% if file.view_area and file.view_path %}
+              <a class="file-view-link" href="{{ url_for('view_file', area=file.view_area, file_path=file.view_path) }}">Ver</a>
+              {% endif %}
+            </div>
+            <code class="task-file-path">{{ file.relative_path }}</code>
+            <div class="task-file-meta">
+              <span class="task-meta-pill task-meta-risk-{{ file.risk or 'unknown' }}">Risk: {{ file.risk or 'n/d' }}</span>
+              <span>Executor: {{ file.executor or 'n/d' }}</span>
+              <span>Updated: {{ file.updated_at or file.modified_at }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty small-empty">Nenhuma task neste status. Use os outros grupos para entender onde existe trabalho pendente.</p>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="runs-capsules" aria-labelledby="runs-capsules-title">
+    <div class="section-heading">
+      <p class="eyebrow">Runs / capsulas</p>
+      <h2 id="runs-capsules-title">Execucao controlada</h2>
+      <p class="section-subtitle">Resumo das ultimas runs, handoffs, loops e canarios. Execucao live segue bloqueada pelos gates.</p>
+    </div>
+
+    <div class="ops-grid">
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Run</p><h3>Ultima run local</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_run.status }}">{{ snapshot.latest_run.status }}</span>
+        </div>
+        {% if snapshot.latest_run.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Run</p><p class="metric-value">{{ snapshot.latest_run.run_id }}</p></div>
+          <div><p class="metric-label">Task</p><p class="metric-value">{{ snapshot.latest_run.task_id }}</p></div>
+          <div><p class="metric-label">Readiness</p><p class="metric-value">{{ (snapshot.latest_run.readiness_status or 'n/d') | replace('_', ' ') }}</p></div>
+          <div><p class="metric-label">Sync plan</p><p class="metric-value">{{ (snapshot.latest_run.sync_plan_status or 'n/d') | replace('_', ' ') }}</p></div>
+        </div>
+        <p class="metric-path">{{ snapshot.latest_run.workspace_path }}</p>
+        {% else %}
+        <p class="empty small-empty">Nenhuma run em runs/. Quando uma run for criada, o painel mostra readiness e sync plan aqui.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Loop</p><h3>Controlled Loop</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_controlled_loop.status }}">{{ snapshot.latest_controlled_loop.status }}</span>
+        </div>
+        {% if snapshot.latest_controlled_loop.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Decisao</p><p class="metric-value">{{ snapshot.latest_controlled_loop.decision }}</p></div>
+          <div><p class="metric-label">Steps</p><p class="metric-value">{{ snapshot.latest_controlled_loop.steps_executed }}/{{ snapshot.latest_controlled_loop.max_steps }}</p></div>
+          <div><p class="metric-label">Running tasks</p><p class="metric-value">{{ snapshot.latest_controlled_loop.hygiene.running_tasks_count or 0 }}</p></div>
+          <div><p class="metric-label">Needs review</p><p class="metric-value">{{ snapshot.latest_controlled_loop.hygiene.needs_review_count or 0 }}</p></div>
+        </div>
+        {% if snapshot.latest_controlled_loop.view_path %}
+        <a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_controlled_loop.view_path) }}">Ver report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum Controlled Loop valido em reports/factory-loops/.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Codex</p><h3>Ultimo handoff</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_handoff.mode }}">{{ snapshot.latest_handoff.mode }}</span>
+        </div>
+        {% if snapshot.latest_handoff.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Run</p><p class="metric-value">{{ snapshot.latest_handoff.run_id }}</p></div>
+          <div><p class="metric-label">Executado</p><p class="metric-value">{{ snapshot.latest_handoff.executed }}</p></div>
+          <div><p class="metric-label">Live enabled</p><p class="metric-value">{{ snapshot.latest_handoff.live_enabled }}</p></div>
+          <div><p class="metric-label">Readiness</p><p class="metric-value">{{ (snapshot.latest_handoff.readiness_status or 'n/d') | replace('_', ' ') }}</p></div>
+        </div>
+        {% if snapshot.latest_handoff.view_path %}
+        <a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_handoff.view_path) }}">Ver report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum handoff valido em reports/run-handoffs/.</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="evidence" aria-labelledby="evidence-title">
+    <div class="section-heading">
+      <p class="eyebrow">Reports / evidencias</p>
+      <h2 id="evidence-title">Material de fechamento</h2>
+      <p class="section-subtitle">Arquivos recentes para revisar sem abrir terminal. O viewer bloqueia traversal, symlink e nomes sensiveis.</p>
+    </div>
+
+    <div class="content-grid">
+      <article class="panel">
+        <div class="panel-head"><h3>Reports recentes</h3></div>
+        {% if snapshot.reports %}
+        <ul class="file-list">
+          {% for file in snapshot.reports %}
+          <li class="file-item">
+            <div class="file-main"><code>{{ file.relative_path }}</code><span>{{ file.name }}</span></div>
+            <div class="file-meta"><span>{{ file.modified_at }}</span><span>{{ file.size_label }}</span><a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=file.view_path) }}">Ver</a></div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">Nenhum arquivo recente em reports/.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><h3>Docs e discoveries</h3></div>
+        {% if snapshot.docs or snapshot.discoveries %}
+        <ul class="file-list">
+          {% for file in snapshot.docs %}
+          <li class="file-item">
+            <div class="file-main"><code>{{ file.relative_path }}</code><span>{{ file.modified_at }}</span></div>
+            <div class="file-meta"><span>{{ file.size_label }}</span><a class="file-view-link" href="{{ url_for('view_file', area='docs', file_path=file.view_path) }}">Ver</a></div>
+          </li>
+          {% endfor %}
+          {% for file in snapshot.discoveries %}
+          <li class="file-item">
+            <div class="file-main"><code>{{ file.relative_path }}</code><span>{{ file.modified_at }}</span></div>
+            <div class="file-meta"><span>{{ file.size_label }}</span><a class="file-view-link" href="{{ url_for('view_file', area='discovery', file_path=file.view_path) }}">Ver</a></div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">Nenhum doc ou discovery recente.</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="security-gates" aria-labelledby="security-gates-title">
+    <div class="section-heading">
+      <p class="eyebrow">Seguranca / gates</p>
+      <h2 id="security-gates-title">Controles de avancar</h2>
+      <p class="section-subtitle">Gates de live, expansion policy e avaliacao de execucao ficam visiveis, sem mover regra critica para o frontend.</p>
+    </div>
+
+    <div class="ops-grid">
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Execution</p><h3>Ultima execucao avaliada</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_execution_evaluation.decision }}">{{ snapshot.latest_execution_evaluation.decision }}</span>
+        </div>
+        {% if snapshot.latest_execution_evaluation.available %}
+        <ul class="compact-list gate-list">
+          <li>no_push: {{ snapshot.latest_execution_evaluation.checks.no_push }}</li>
+          <li>no_deploy: {{ snapshot.latest_execution_evaluation.checks.no_deploy }}</li>
+          <li>no_paid_api: {{ snapshot.latest_execution_evaluation.checks.no_paid_api }}</li>
+          <li>no_secrets: {{ snapshot.latest_execution_evaluation.checks.no_secrets }}</li>
+          <li>panel_ok: {{ snapshot.latest_execution_evaluation.checks.panel_ok }}</li>
+        </ul>
+        {% if snapshot.latest_execution_evaluation.view_path %}
+        <a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_execution_evaluation.view_path) }}">Ver report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhuma execucao avaliada em reports/execution-evaluations/.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Review Gate</p><h3>Bounded live canary</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_bounded_live_canary_review_gate.decision }}">{{ snapshot.latest_bounded_live_canary_review_gate.decision }}</span>
+        </div>
+        {% if snapshot.latest_bounded_live_canary_review_gate.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Expansion</p><p class="metric-value">{{ snapshot.latest_bounded_live_canary_review_gate.approved_for_expansion_policy }}</p></div>
+          <div><p class="metric-label">Live allowed</p><p class="metric-value">{{ snapshot.latest_bounded_live_canary_review_gate.allowed_to_execute_live }}</p></div>
+          <div><p class="metric-label">Target</p><p class="metric-value">{{ snapshot.latest_bounded_live_canary_review_gate.target_minutes }} min</p></div>
+          <div><p class="metric-label">Steps</p><p class="metric-value">{{ snapshot.latest_bounded_live_canary_review_gate.max_steps }}</p></div>
+        </div>
+        {% if snapshot.latest_bounded_live_canary_review_gate.view_path %}
+        <a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_bounded_live_canary_review_gate.view_path) }}">Ver report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhum review gate valido.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel signal-card">
+        <div class="panel-head evaluator-head">
+          <div><p class="eyebrow">Policy</p><h3>Expansao e rehearsal</h3></div>
+          <span class="status-pill status-{{ snapshot.latest_long_run_expansion_policy.decision }}">{{ snapshot.latest_long_run_expansion_policy.decision }}</span>
+        </div>
+        {% if snapshot.latest_long_run_expansion_policy.available %}
+        <div class="evaluator-grid">
+          <div><p class="metric-label">Nivel atual</p><p class="metric-value">{{ snapshot.latest_long_run_expansion_policy.current_level }}</p></div>
+          <div><p class="metric-label">Proximo nivel</p><p class="metric-value">{{ snapshot.latest_long_run_expansion_policy.proposed_next_level }}</p></div>
+          <div><p class="metric-label">Review manual</p><p class="metric-value">{{ snapshot.latest_long_run_expansion_policy.requires_manual_review }}</p></div>
+          <div><p class="metric-label">Live allowed</p><p class="metric-value">{{ snapshot.latest_long_run_expansion_policy.allowed_to_execute_live }}</p></div>
+        </div>
+        {% if snapshot.latest_long_run_expansion_policy.view_path %}
+        <a class="file-view-link" href="{{ url_for('view_file', area='reports', file_path=snapshot.latest_long_run_expansion_policy.view_path) }}">Ver report</a>
+        {% endif %}
+        {% else %}
+        <p class="empty small-empty">Nenhuma policy valida em reports/long-run-expansion-policies/.</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section" id="next-steps" aria-labelledby="next-steps-title">
+    <div class="section-heading">
+      <p class="eyebrow">Proximos passos</p>
+      <h2 id="next-steps-title">Acao recomendada</h2>
+    </div>
+    <div class="content-grid">
+      <article class="panel next-card">
+        <p class="next-step">{{ snapshot.next_step }}</p>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h3>Ultimos commits</h3></div>
+        {% if snapshot.commits %}
+        <ol class="commit-list">
+          {% for commit in snapshot.commits %}
+          <li class="commit-item"><code>{{ commit.short_hash }}</code><span>{{ commit.subject }}</span></li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p class="empty">Nenhum commit disponivel.</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,28 @@
+{
+  "sprint": "081",
+  "slug": "panel-ux-audit-visual-direction-v0",
+  "title": "FactoryOS Panel UX Audit & Visual Direction V0",
+  "objective": "Auditar o painel local e definir direcao visual/UX para a primeira rodada de polish.",
+  "scope": [
+    "app/panel_ux_audit.py",
+    "app/cli.py",
+    "docs/panel-ux-visual-direction.md",
+    "reports/panel-ux-audit-visual-direction-v0-proof.txt"
+  ],
+  "command": "panel-ux-audit --dry-run",
+  "constraints": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "read_only_panel": true,
+    "no_external_dependencies": true
+  },
+  "acceptance": {
+    "ux_decision_values": ["passed", "needs_polish", "failed"],
+    "dry_run_only": true,
+    "visual_direction_documented": true,
+    "security_flags_true": true
+  },
+  "status": "implemented"
+}

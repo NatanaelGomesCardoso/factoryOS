@@ -1,0 +1,26 @@
+{
+  "id": "0576",
+  "name": "Expanded Canary Workspace Snapshot Fix V0",
+  "status": "planned",
+  "objective": "Corrigir a extração do snapshot de workspace no expanded-bounded-live-canary para não falhar com KeyError e manter os gates de segurança.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/expanded-canary-workspace-snapshot-fix-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "sprint": 37,
+  "title": "Long Run Expansion Policy V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Criar uma política explícita para expansão futura de long run live",
+    "Definir critérios para o próximo gate 30m/6 steps",
+    "Gerar plano/política, não executar live",
+    "Manter live acima de 15 minutos / 3 steps bloqueado até uma sprint futura"
+  ],
+  "reuse_first": [
+    "bounded_live_canary_review_gate",
+    "long_run_expansion_policy",
+    "codex_cost_audit",
+    "maintenance_plan",
+    "state_hygiene",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "expandir além de 30m/6 steps nesta sprint",
+    "deploy",
+    "push",
+    "mudar harness"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/037-long-run-expansion-policy-v0.json",
+    ".venv/bin/python -m app.cli long-run-expansion-policy --run-id 20260501-122233-20260501-122221-sprint-035-canary-valida-e2f5d0 --target-minutes 30 --max-steps 6",
+    ".venv/bin/python -m app.cli long-run-expansion-policy --run-id ../oops --target-minutes 30 --max-steps 6",
+    ".venv/bin/python -m app.cli long-run-expansion-policy --run-id 20260501-122233-20260501-122221-sprint-035-canary-valida-e2f5d0 --target-minutes 29 --max-steps 6",
+    ".venv/bin/python -m app.cli long-run-expansion-policy --run-id 20260501-122233-20260501-122221-sprint-035-canary-valida-e2f5d0 --target-minutes 30 --max-steps 5",
+    "TestClient GET / = 200",
+    "git diff --check",
+    "harness global-doctor --strict",
+    "harness doctor --source-root <HARNESS_ROOT> --strict"
+  ]
+}

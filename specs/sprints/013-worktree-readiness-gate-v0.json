@@ -1,0 +1,91 @@
+{
+  "id": "sprint-013-worktree-readiness-gate-v0",
+  "title": "Worktree Sync & Readiness Gate V0",
+  "status": "planned",
+  "goal": "Criar um gate local de readiness para worktrees por run, bloqueando execucao live futura quando o workspace estiver fora do branch, sujo ou divergente do repo principal.",
+  "features": [
+    {
+      "id": "feat-worktree-readiness-001",
+      "title": "Calcular readiness local",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-workspace-readiness valida run_id e run existente",
+        "run-workspace-readiness usa git como fonte de status, branch, HEAD e worktree",
+        "run-workspace-readiness retorna ready, blocked ou needs_sync_review",
+        "run-workspace-readiness bloqueia quando o workspace nao for um git worktree",
+        "run-workspace-readiness bloqueia quando o branch estiver incorreto",
+        "run-workspace-readiness bloqueia quando o workspace estiver sujo",
+        "run-workspace-readiness nao altera o workspace"
+      ]
+    },
+    {
+      "id": "feat-worktree-readiness-002",
+      "title": "Propagar readiness para handoff e painel",
+      "status": "planned",
+      "files": [
+        "app/codex_handoff.py",
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "run-handoff registra readiness_status e readiness_reasons",
+        "run-execute --dry-run registra readiness_status",
+        "run-execute --live continua bloqueado sem env e tambem bloqueia se readiness nao for ready",
+        "o painel mostra readiness_status no card da run e no card do handoff"
+      ]
+    },
+    {
+      "id": "feat-worktree-readiness-003",
+      "title": "Registrar prova da sprint",
+      "status": "planned",
+      "files": [
+        "reports/worktree-readiness-gate-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o proof registra comandos executados",
+        "o proof registra run, branch, HEAD principal e HEAD do worktree",
+        "o proof confirma que nao houve merge, rebase, fetch, pull ou live Codex",
+        "o proof registra riscos e pendencias"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/013-worktree-readiness-gate-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-status 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-workspace-readiness 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-handoff 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-execute 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886 --dry-run",
+    ".venv/bin/python -m app.cli run-workspace-readiness ../oops",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ],
+  "risks": [
+    "workspace desatualizado deve bloquear live futura",
+    "branch errada ou workspace sujo devem ser tratados como blocked",
+    "divergencia de HEAD precisa cair em needs_sync_review",
+    "nenhum ajuste automatico de sync pode acontecer"
+  ],
+  "out_of_scope": [
+    "execucao live do Codex",
+    "daemon",
+    "scheduler",
+    "App Server",
+    "MCP",
+    "integracao GitHub/Linear",
+    "execucao paralela",
+    "merge automatico",
+    "rebase automatico",
+    "deploy"
+  ]
+}

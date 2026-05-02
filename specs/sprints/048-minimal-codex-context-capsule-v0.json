@@ -1,0 +1,40 @@
+{
+  "sprint": 48,
+  "title": "Minimal Codex Context Capsule V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Criar cápsula Git mínima para Codex",
+    "Inicializar Git dentro da cápsula",
+    "Copiar somente arquivos incluídos",
+    "Copiar digest recente quando existir",
+    "Expor create/list/inspect por CLI"
+  ],
+  "reuse_first": [
+    "codex_context_router",
+    "memory_digest",
+    "report_index",
+    "codex_quiet_runner",
+    "cli"
+  ],
+  "out_of_scope": [
+    "alterar ~/.codex/config.toml",
+    "mexer no harness global",
+    "executar live",
+    "copiar reports grandes",
+    "usar API paga"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s048.txt",
+    ".venv/bin/python -m json.tool specs/sprints/048-minimal-codex-context-capsule-v0.json > <TMP_DIR>/s048-json-check.txt",
+    ".venv/bin/python -m app.cli codex-capsule-create --label s048-mini --source-root <FACTORYOS_ROOT> --include README.md --use-latest-digest --max-context-bytes 200000 > <TMP_DIR>/s048-capsule-create.json",
+    ".venv/bin/python -m app.cli codex-capsule-list --limit 5 > <TMP_DIR>/s048-capsule-list.json",
+    ".venv/bin/python -m app.cli codex-capsule-inspect --capsule <CAPSULE_PATH> > <TMP_DIR>/s048-capsule-inspect.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/minimal-codex-context-capsule-v0-proof.txt",
+  "proof_path": "reports/minimal-codex-context-capsule-v0-proof.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FactoryOS Route Decision",
+  "type": "object",
+  "required": ["decision", "risk", "reason", "suggested_executor", "needs_codex", "source"],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": ["local_only", "codex_needed", "human_review"]
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 3
+    },
+    "suggested_executor": {
+      "type": "string",
+      "enum": ["python_template", "ollama", "codex_low", "codex_medium", "chatgpt_review"]
+    },
+    "needs_codex": {
+      "type": "boolean"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["python_precheck", "ollama_normalized", "python_fallback"]
+    }
+  },
+  "additionalProperties": true
+}

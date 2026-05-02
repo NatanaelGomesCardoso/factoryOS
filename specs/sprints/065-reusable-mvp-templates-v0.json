@@ -1,0 +1,25 @@
+{
+  "id": "065",
+  "name": "Reusable MVP Templates V0",
+  "status": "planned",
+  "objective": "Criar uma camada local-first de templates MVP reutilizáveis e integrada ao intake.",
+  "command": "mvp-template-list | mvp-template-show | mvp-template-validate",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/reusable-mvp-templates-v0-proof.txt",
+    "generated": [
+      "docs/reusable-mvp-templates.md",
+      "specs/discovery/reuse-first-reusable-mvp-templates-v0.md",
+      "specs/prd/reusable-mvp-templates-v0-prd.md",
+      "specs/technical-spec/reusable-mvp-templates-v0.md"
+    ]
+  }
+}
+

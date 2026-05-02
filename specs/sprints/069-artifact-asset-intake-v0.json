@@ -1,0 +1,19 @@
+{
+  "id": "069",
+  "name": "Artifact / Asset Intake V0",
+  "status": "planned",
+  "objective": "Criar intake controlado de assets e artefatos sem copiar segredos nem arquivos perigosos.",
+  "command": "artifact-intake-plan",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/artifact-asset-intake-v0-proof.txt",
+    "generated": "reports/artifact-intakes/"
+  }
+}

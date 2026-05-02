@@ -1,0 +1,13 @@
+{
+  "id": "sprint-035-bounded-long-run-live-canary-v0",
+  "title": "Bounded Long Run Live Canary V0",
+  "goal": "Adicionar um único caminho live canary curto e controlado, dependente de rehearsal recente válido e whitelist rígida de arquivos.",
+  "validations": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/035-bounded-long-run-live-canary-v0.json",
+    "FACTORYOS_ENABLE_LIVE_CODEX=1 .venv/bin/python -m app.cli factory-start --live --canary --cost-aware --evaluate --run-id <RUN_ID> --target-minutes 15 --max-steps 3",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

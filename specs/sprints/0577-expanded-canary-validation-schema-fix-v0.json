@@ -1,0 +1,26 @@
+{
+  "id": "0577",
+  "name": "Expanded Canary Validation Schema Fix V0",
+  "status": "planned",
+  "objective": "Normalizar o schema de validation do expanded-bounded-live-canary para suportar workspace, readiness, sync_plan e flags derivadas sem KeyError.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/expanded-canary-validation-schema-fix-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

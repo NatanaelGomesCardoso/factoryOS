@@ -1,0 +1,62 @@
+
+=== docs_readme ===
+{
+  "decision": "local_only",
+  "risk": "low",
+  "reason": "Instruções de instalação e testes são documentação simples.",
+  "suggested_executor": "python_template",
+  "needs_codex": false,
+  "source": "ollama_normalized",
+  "llm_raw": {
+    "decision": "local_only",
+    "risk": "low",
+    "reason": "Instruções de instalação e testes são documentação simples.",
+    "suggested_executor": "python_template",
+    "needs_codex": false
+  }
+}
+
+=== small_bugfix ===
+{
+  "decision": "codex_needed",
+  "risk": "medium",
+  "reason": "Bug na função de cálculo de total.",
+  "suggested_executor": "codex_medium",
+  "needs_codex": true,
+  "source": "ollama_normalized",
+  "llm_raw": {
+    "decision": "codex_needed",
+    "risk": "medium",
+    "reason": "Bug na função de cálculo de total.",
+    "suggested_executor": "codex_medium",
+    "needs_codex": true
+  }
+}
+
+=== auth_security ===
+{
+  "decision": "human_review",
+  "risk": "high",
+  "reason": "A tarefa toca segurança, dados sensíveis, auth, pagamento, banco ou deploy.",
+  "suggested_executor": "chatgpt_review",
+  "needs_codex": false,
+  "source": "python_precheck",
+  "llm_raw": null
+}
+
+=== frontend_copy ===
+{
+  "decision": "local_only",
+  "risk": "low",
+  "reason": "Texto simples, sem código crítico.",
+  "suggested_executor": "python_template",
+  "needs_codex": false,
+  "source": "ollama_normalized",
+  "llm_raw": {
+    "decision": "local_only",
+    "risk": "low",
+    "reason": "Texto simples, sem código crítico.",
+    "suggested_executor": "python_template",
+    "needs_codex": false
+  }
+}

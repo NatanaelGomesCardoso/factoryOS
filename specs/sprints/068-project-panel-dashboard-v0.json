@@ -1,0 +1,25 @@
+{
+  "id": "068",
+  "name": "Project Panel Dashboard V0",
+  "status": "planned",
+  "objective": "Mostrar projetos e status do fluxo MVP em um painel local read-only.",
+  "command": "app.web",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/project-panel-dashboard-v0-proof.txt",
+    "generated": [
+      "docs/project-panel-dashboard.md",
+      "specs/discovery/reuse-first-project-panel-dashboard-v0.md",
+      "specs/prd/project-panel-dashboard-v0-prd.md",
+      "specs/technical-spec/project-panel-dashboard-v0.md"
+    ]
+  }
+}
+

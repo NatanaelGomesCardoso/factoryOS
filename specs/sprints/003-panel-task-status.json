@@ -1,0 +1,38 @@
+{
+  "id": "sprint-003-panel-task-status",
+  "title": "Status da fila no painel",
+  "status": "planned",
+  "goal": "Mostrar estado read-only das pastas de tasks no painel local.",
+  "features": [
+    {
+      "id": "feat-panel-task-status-001",
+      "title": "Coletar status da fila a partir das pastas tasks",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py"
+      ],
+      "acceptanceCriteria": [
+        "conta arquivos em tasks/pending",
+        "conta arquivos em tasks/running",
+        "conta arquivos em tasks/done",
+        "conta arquivos em tasks/failed",
+        "não altera arquivos"
+      ]
+    },
+    {
+      "id": "feat-panel-task-status-002",
+      "title": "Exibir status da fila no painel",
+      "status": "planned",
+      "files": [
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "painel mostra seção de fila",
+        "contagens aparecem mesmo com pastas vazias",
+        "layout continua legível",
+        "painel continua read-only"
+      ]
+    }
+  ]
+}

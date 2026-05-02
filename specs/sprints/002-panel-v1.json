@@ -1,0 +1,51 @@
+{
+  "id": "sprint-002-panel-v1",
+  "title": "Painel web local read-only",
+  "status": "planned",
+  "goal": "Criar painel web local leve para acompanhar estado do FactoryOS.",
+  "features": [
+    {
+      "id": "feat-panel-001",
+      "title": "Criar servidor FastAPI com healthcheck",
+      "status": "planned",
+      "files": [
+        "app/web.py"
+      ],
+      "acceptanceCriteria": [
+        "GET /health retorna ok=true",
+        "servidor roda em 127.0.0.1:8787",
+        "python3 -m py_compile app passa"
+      ],
+      "verification": {
+        "commands": [
+          "python3 -m py_compile app",
+          "python3 -m app.web"
+        ]
+      }
+    },
+    {
+      "id": "feat-panel-002",
+      "title": "Criar página HTML read-only",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/base.html",
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "Página inicial renderiza HTML",
+        "mostra commits recentes",
+        "mostra reports recentes",
+        "mostra discoveries",
+        "não executa Codex",
+        "não altera arquivos"
+      ],
+      "verification": {
+        "commands": [
+          "python3 -m py_compile app"
+        ]
+      }
+    }
+  ]
+}

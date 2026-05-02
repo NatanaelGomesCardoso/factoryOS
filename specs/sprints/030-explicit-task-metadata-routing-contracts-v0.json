@@ -1,0 +1,42 @@
+{
+  "sprint": 30,
+  "title": "Explicit Task Metadata & Routing Contracts V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Criar schema local de routing contract v0",
+    "Persistir metadata opcional em task e run",
+    "Fazer codex-plan e codex-context preferirem metadata explícita",
+    "Manter fallback heurístico para dados legados",
+    "Validar contrato por CLI e integrar no run-handoff"
+  ],
+  "reuse_first": [
+    "task_runner",
+    "run_workspace",
+    "codex_profile",
+    "codex_context_router",
+    "codex_handoff"
+  ],
+  "out_of_scope": [
+    "executar Codex live",
+    "alterar harness",
+    "migrar dados antigos em lote",
+    "remover heurística existente"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/030-explicit-task-metadata-routing-contracts-v0.json",
+    "task-list",
+    "run-list",
+    "routing-contract-validate --task-id",
+    "codex-plan --task-id",
+    "codex-context --task-id",
+    "routing-contract-validate --run-id",
+    "run-handoff",
+    "path traversal em routing-contract-validate",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

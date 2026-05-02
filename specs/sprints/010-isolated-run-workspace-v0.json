@@ -1,0 +1,79 @@
+{
+  "id": "sprint-010-isolated-run-workspace-v0",
+  "title": "Isolated Run Workspace V0",
+  "status": "planned",
+  "goal": "Criar a base local para workspaces isolados por run, com metadata JSON, budget caps, estados manuais e exposição read-only da ultima run no painel, sem executar Codex automaticamente.",
+  "features": [
+    {
+      "id": "feat-isolated-run-001",
+      "title": "Modelar runs locais isoladas",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "o comando run-create cria uma run a partir de uma task existente",
+        "o workspace isolado e criado em workspaces/runs/<run-id>/",
+        "o JSON da run inclui budget caps e notes",
+        "run id e task id sao validados e path traversal e bloqueado"
+      ]
+    },
+    {
+      "id": "feat-isolated-run-002",
+      "title": "Listar, mostrar e encerrar runs manualmente",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-list agrupa runs por status",
+        "run-show retorna uma run existente em qualquer status",
+        "run-finish move a run para done",
+        "run-fail move a run para failed e registra o motivo"
+      ]
+    },
+    {
+      "id": "feat-isolated-run-003",
+      "title": "Expor a ultima run no painel",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "o painel continua read-only",
+        "a ultima run valida aparece no painel",
+        "o layout permanece simples e seguro",
+        "nenhuma acao de escrita ou execucao e adicionada ao frontend"
+      ]
+    },
+    {
+      "id": "feat-isolated-run-004",
+      "title": "Registrar prova e fechamento",
+      "status": "planned",
+      "files": [
+        "reports/isolated-run-workspace-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o proof registra os comandos executados",
+        "o proof registra o resultado das validacoes",
+        "o proof documenta a decisao tecnica",
+        "o proof nao expõe segredos nem caminhos desnecessarios"
+      ]
+    }
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/010-isolated-run-workspace-v0.json",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-show <run-id>",
+    ".venv/bin/python -m app.cli run-finish <run-id>",
+    ".venv/bin/python -m app.cli run-fail <run-id> --reason \"...\"",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ]
+}

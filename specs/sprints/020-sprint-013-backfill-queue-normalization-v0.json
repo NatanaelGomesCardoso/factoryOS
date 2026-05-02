@@ -1,0 +1,94 @@
+{
+  "id": "sprint-020-sprint-013-backfill-queue-normalization-v0",
+  "title": "Sprint 013 Backfill & Queue Normalization V0",
+  "status": "planned",
+  "goal": "Auditar a pendência antiga da Sprint 013, gerar backfill report conservador e fechar a task apenas quando houver evidência local suficiente, sem apagar dados e sem executar Codex live.",
+  "features": [
+    {
+      "id": "feat-sprint-020-001",
+      "title": "Gerar backfill explícito da Sprint 013",
+      "status": "planned",
+      "files": [
+        "app/state_hygiene.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-state-backfill-sprint-013 gera um report JSON em reports/factory-state-hygiene/",
+        "o comando reaproveita factory-state-audit e factory-state-plan",
+        "o comando reaproveita task-show, task-note e task-finish",
+        "o comando verifica o commit 7c53cd5",
+        "o comando verifica a presença de run-workspace-readiness",
+        "o comando registra decision=needs_review quando a prova for insuficiente"
+      ]
+    },
+    {
+      "id": "feat-sprint-020-002",
+      "title": "Normalizar a fila com política conservadora",
+      "status": "planned",
+      "files": [
+        "tasks/running/20260430-134542-sprint-013-worktree-sync-readiness-gate-ae42c9.json",
+        "tasks/done/20260430-134542-sprint-013-worktree-sync-readiness-gate-ae42c9.json",
+        "reports/sprint-013-backfill-queue-normalization-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "Sprint 013 fecha apenas se todos os critérios mínimos forem verdadeiros",
+        "nenhuma run running ligada à Sprint 013 permanece sem justificativa",
+        "nada é apagado",
+        "nenhum worktree é removido",
+        "nenhuma execução live é feita"
+      ]
+    },
+    {
+      "id": "feat-sprint-020-003",
+      "title": "Registrar discovery, PRD, SPEC e sprint JSON",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-sprint-013-backfill-queue-normalization-v0.md",
+        "specs/prd/sprint-013-backfill-queue-normalization-v0-prd.md",
+        "specs/technical-spec/sprint-013-backfill-queue-normalization-v0.md",
+        "specs/sprints/020-sprint-013-backfill-queue-normalization-v0.json"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra reuso primeiro",
+        "PRD e SPEC documentam critérios de evidência suficiente",
+        "o sprint JSON registra riscos e fora de escopo"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/020-sprint-013-backfill-queue-normalization-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli factory-state-backfill-sprint-013",
+    ".venv/bin/python -m json.tool reports/factory-state-hygiene/<timestamp>-sprint-013-backfill.json",
+    ".venv/bin/python -m app.cli factory-state-audit",
+    ".venv/bin/python -m app.cli factory-state-plan",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "fechar a Sprint 013 sem prova suficiente esconderia uma pendência real",
+    "reports antigos podem ser incompletos ou conservadores demais",
+    "a normalização não pode apagar histórico nem worktrees"
+  ],
+  "out_of_scope": [
+    "apagar arquivos",
+    "remover worktree",
+    "live Codex",
+    "merge",
+    "rebase",
+    "fetch",
+    "pull",
+    "deploy",
+    "daemon",
+    "scheduler",
+    "factory-start",
+    "GitHub",
+    "Linear",
+    "MCP",
+    "API paga"
+  ]
+}

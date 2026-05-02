@@ -1,0 +1,44 @@
+{
+  "sprint": 31,
+  "title": "Factory Long Run Dry-Run Planner V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Simular execução longa sem live",
+    "Usar routing contracts, codex-plan e codex-context",
+    "Consolidar readiness, sync-plan e factory-state",
+    "Gerar report único de long-run plan",
+    "Manter allowed_to_execute_live=false e required_manual_review=true"
+  ],
+  "reuse_first": [
+    "controlled_loop",
+    "factory_start",
+    "state_hygiene",
+    "run_workspace",
+    "codex_profile",
+    "codex_context_router"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "scheduler",
+    "daemon",
+    "limpeza automática de reports/worktrees"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/031-factory-long-run-dry-run-planner-v0.json",
+    "task-list",
+    "run-list",
+    "run-workspace-prepare",
+    "run-workspace-readiness",
+    "run-workspace-sync-plan",
+    "factory-long-run-plan --run-id",
+    "path traversal em factory-long-run-plan",
+    "target_minutes inválido",
+    "max_steps inválido",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

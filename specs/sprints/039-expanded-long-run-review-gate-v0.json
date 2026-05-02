@@ -1,0 +1,35 @@
+{
+  "sprint": 39,
+  "title": "Expanded Long Run Review Gate V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Revisar formalmente o rehearsal expandido da Sprint 038",
+    "Validar evidências do rehearsal e do state atual",
+    "Decidir se uma sprint futura pode seguir para live 30m/6 steps",
+    "Não liberar live diretamente"
+  ],
+  "reuse_first": [
+    "expanded_long_run_rehearsal",
+    "maintenance_plan",
+    "state_hygiene",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "reduzir a zero a política de review",
+    "deploy",
+    "push",
+    "mudar harness"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/039-expanded-long-run-review-gate-v0.json",
+    ".venv/bin/python -m app.cli expanded-long-run-review --run-id <RUN_ID_DA_SPRINT_038>",
+    ".venv/bin/python -m app.cli expanded-long-run-review --run-id ../oops",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

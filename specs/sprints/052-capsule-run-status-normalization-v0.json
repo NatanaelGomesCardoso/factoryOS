@@ -1,0 +1,35 @@
+{
+  "sprint": 52,
+  "title": "Capsule Run Status Normalization V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Normalizar a decisão final da execução de cápsula",
+    "Transformar bloqueio por diff-like lines em warning quando exit_code=0",
+    "Manter blocked para erros reais e JSON inválido"
+  ],
+  "reuse_first": [
+    "codex_capsule_execution",
+    "codex_quiet_runner",
+    "compact_execution_harness",
+    "cli"
+  ],
+  "out_of_scope": [
+    "aplicar mudanças no repo real",
+    "deploy",
+    "push/pull/fetch/rebase",
+    "usar API paga",
+    "mexer em secrets"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s052.txt",
+    ".venv/bin/python -m json.tool specs/sprints/052-capsule-run-status-normalization-v0.json > <TMP_DIR>/s052-json-check.txt",
+    ".venv/bin/python -m app.cli capsule-run-status --execution-report reports/capsule-executions/20260501-155305-cheap-task-canary.json --export-plan reports/capsule-export-plans/20260501-155320-cheap-task-canary.json --diff-report reports/capsule-diffs/20260501-155320-cheap-task-canary.json > <TMP_DIR>/s052-capsule-run-status.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/capsule-run-status-normalization-v0-proof.txt",
+  "proof_path": "reports/capsule-run-status-normalization-v0-proof.txt"
+}

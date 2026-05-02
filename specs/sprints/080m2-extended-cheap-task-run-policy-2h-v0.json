@@ -1,0 +1,27 @@
+{
+  "sprint": "080.M.2",
+  "title": "Extended Cheap Task Run Policy 2h V0",
+  "status": "implemented",
+  "objective": "Planejar e ensaiar runs leves/baratas de ate 2h sem liberar execução live.",
+  "commands": [
+    "factory-extended-cheap-run-plan --max-minutes 120 --dry-run",
+    "factory-extended-cheap-run-rehearsal --max-minutes 120 --max-tasks <N> --dry-run",
+    "factory-extended-cheap-run-gate --dry-run"
+  ],
+  "limits": {
+    "default_max_minutes": 60,
+    "max_minutes": 120,
+    "default_max_tasks": 10,
+    "max_tasks": 30
+  },
+  "safety": {
+    "capsule_first": true,
+    "task_by_task": true,
+    "live_execution_allowed": false,
+    "requires_new_gate_for_live": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  }
+}

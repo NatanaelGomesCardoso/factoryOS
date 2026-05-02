@@ -1,0 +1,13 @@
+{
+  "id": "sprint-034-long-run-controlled-dry-run-rehearsal-v0",
+  "title": "Long Run Controlled Dry-Run Rehearsal V0",
+  "goal": "Consolidar planner, maintenance, cost audit e factory-start cost-aware em um rehearsal dry-run único, sem live.",
+  "validations": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/034-long-run-controlled-dry-run-rehearsal-v0.json",
+    ".venv/bin/python -m app.cli factory-long-run-rehearsal --dry-run --run-id <RUN_ID> --target-minutes 30 --max-steps 6",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

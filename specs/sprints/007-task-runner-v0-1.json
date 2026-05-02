@@ -1,0 +1,78 @@
+{
+  "id": "sprint-007-task-runner-v0-1",
+  "title": "Task Runner V0.1 usability",
+  "status": "done",
+  "goal": "Melhorar a usabilidade operacional do task runner local com consulta, notas e viewer seguro do JSON.",
+  "features": [
+    {
+      "id": "feat-task-runner-v0-1-001",
+      "title": "Adicionar consulta de task por id",
+        "status": "done",
+      "files": [
+        "app/task_runner.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "task-show encontra task em pending, running, done ou failed",
+        "task-show retorna JSON",
+        "task-show falha com erro explicito para id inexistente",
+        "task-show bloqueia path traversal"
+      ]
+    },
+    {
+      "id": "feat-task-runner-v0-1-002",
+      "title": "Adicionar notas operacionais sem mudar estado",
+        "status": "done",
+      "files": [
+        "app/task_runner.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "task-note adiciona item ao array notes",
+        "task-note atualiza updated_at",
+        "task-note preserva status e pasta",
+        "task-note rejeita nota vazia",
+        "task-note valida JSON antes e depois"
+      ]
+    },
+    {
+      "id": "feat-task-runner-v0-1-003",
+      "title": "Melhorar exibicao do painel e viewer de tasks",
+        "status": "done",
+      "files": [
+        "app/panel_data.py",
+        "app/web.py",
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "fila mostra titulo, risk, executor e updated_at quando disponivel",
+        "cada item da fila tem link Ver",
+        "link abre JSON da task via /view/tasks/{file_path}",
+        "viewer aceita apenas area tasks com validacao backend",
+        "painel continua read-only"
+      ]
+    }
+  ],
+  "validation": [
+    "source .venv/bin/activate se existir",
+    "python -m py_compile app/*.py",
+    "python -m compileall app",
+    "python -m json.tool specs/sprints/007-task-runner-v0-1.json",
+    "python -m app.cli task-list",
+    "python -m app.cli task-show 20260429-083531-sprint-007-task-runner-v0-1-usability-6a7c88",
+    "python -m app.cli task-note 20260429-083531-sprint-007-task-runner-v0-1-usability-6a7c88 \"Sprint 007 implementada em validação local\"",
+    "python -m app.cli task-show 20260429-083531-sprint-007-task-runner-v0-1-usability-6a7c88 e confirmar notes",
+    "python -m app.cli task-finish 20260429-083531-sprint-007-task-runner-v0-1-usability-6a7c88",
+    "python -m app.cli task-show inexistente deve falhar",
+    "python -m app.cli task-note inexistente deve falhar",
+    "python -m app.cli task-show ../evil deve falhar",
+    "python -m app.cli task-note com nota vazia deve falhar",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "GET /view/tasks/<running-task>.json retorna 200 antes da transicao",
+    "GET /view/tasks/<done-task>.json retorna 200 apos a transicao",
+    "GET /view/tasks/../requirements.txt retorna 400 ou 404",
+    "git diff --check",
+    "harness security-doctor --source-root <repo> --strict (partial aceito localmente)"
+  ]
+}

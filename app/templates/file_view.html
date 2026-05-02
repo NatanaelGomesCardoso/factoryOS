@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}FactoryOS | {{ view.area_label }}{% endblock %}
+
+{% block content %}
+<section class="file-view-shell">
+  <header class="file-view-hero">
+    <div class="hero-copy file-view-panel">
+      <p class="brand">FactoryOS</p>
+      <h1>{{ view.area_label }}</h1>
+      <p class="lead">
+        Leitura read-only do arquivo local abaixo. O backend valida o caminho e
+        o conteúdo é exibido apenas como texto escapado.
+      </p>
+      <div class="file-view-actions">
+        <a class="button-link" href="{{ request.url_for('index') }}">Voltar ao painel</a>
+        <a class="button-link" href="{{ request.url_for('view_file', area=view.area, file_path=view.requested_path) }}">Recarregar</a>
+      </div>
+    </div>
+
+    <aside class="status-card file-view-panel">
+      <h2>Metadados</h2>
+      <div class="file-view-meta">
+        <div class="file-view-meta-row">
+          <span>Área</span>
+          <strong>{{ view.area }}</strong>
+        </div>
+        <div class="file-view-meta-row">
+          <span>Arquivo</span>
+          <strong>{{ view.repo_relative_path }}</strong>
+        </div>
+        <div class="file-view-meta-row">
+          <span>Atualizado</span>
+          <strong>{{ view.modified_at }}</strong>
+        </div>
+        <div class="file-view-meta-row">
+          <span>Tamanho</span>
+          <strong>{{ view.size_label }}</strong>
+        </div>
+      </div>
+    </aside>
+  </header>
+
+  <article class="panel file-view-content-card">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">Conteúdo</p>
+        <h2>{{ view.content_kind | upper }}</h2>
+      </div>
+    </div>
+
+    {% if view.notice %}
+    <div class="notice file-notice" role="note">{{ view.notice }}</div>
+    {% endif %}
+
+    {% if view.content %}
+    <pre class="file-content">{{ view.content }}</pre>
+    {% else %}
+    <p class="empty file-content-empty">Nenhum conteúdo textual para exibir.</p>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

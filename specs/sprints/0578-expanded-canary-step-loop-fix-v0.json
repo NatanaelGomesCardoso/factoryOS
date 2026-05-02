@@ -1,0 +1,26 @@
+{
+  "id": "0578",
+  "name": "Expanded Canary Step Loop Continuation Fix V0",
+  "status": "planned",
+  "objective": "Corrigir o loop do expanded-bounded-live-canary para continuar de 1 até max_steps, com parada imediata em falha e sem exigir todos os step files antes do fim.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/expanded-canary-step-loop-fix-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

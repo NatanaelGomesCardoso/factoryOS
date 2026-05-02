@@ -1,0 +1,84 @@
+{
+  "id": "sprint-026-bounded-multi-step-factory-start-dry-run-v0",
+  "title": "Bounded Multi-Step Factory Start Dry-Run V0",
+  "status": "planned",
+  "goal": "Provar factory-start com mais de um step em dry-run, usando factory-loop V1 por step, com report multi-step e avaliação final conservadora sem execução live.",
+  "features": [
+    {
+      "id": "feat-factory-start-026-001",
+      "title": "Executar factory-start dry-run com múltiplos steps bounded",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-start --dry-run --run-id <RUN_ID> --max-steps 2 executa steps sequenciais",
+        "max_steps aceito apenas entre 1 e 3",
+        "nenhum step executa live"
+      ]
+    },
+    {
+      "id": "feat-factory-start-026-002",
+      "title": "Gerar report multi-step e avaliação conservadora",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/execution_evaluator.py",
+        "app/report_index.py"
+      ],
+      "acceptanceCriteria": [
+        "report expõe steps_requested, steps_completed e steps[]",
+        "executed_live permanece false",
+        "evaluation_decision final fica em dry_run_only ou needs_review conservador"
+      ]
+    },
+    {
+      "id": "feat-factory-start-026-003",
+      "title": "Expor resumo multi-step no painel e na prova local",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "reports/bounded-multi-step-factory-start-dry-run-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "painel mostra max_steps, steps_completed, final_decision, evaluation_decision e executed_live",
+        "proof registra validação multi-step com max_steps=2",
+        "painel continua read-only"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/026-bounded-multi-step-factory-start-dry-run-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-prepare <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <RUN_ID>",
+    ".venv/bin/python -m app.cli factory-start --dry-run --evaluate --run-id <RUN_ID> --max-steps 2",
+    ".venv/bin/python -m app.cli factory-start --dry-run --evaluate --run-id ../oops --max-steps 2",
+    ".venv/bin/python -m app.cli factory-start --dry-run --evaluate --run-id <RUN_ID> --max-steps 99",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "sequência multi-step pode mascarar ambiguidade se continuar após um step não confiável",
+    "report consolidado pode perder rastreabilidade por step se não guardar loop_report individual",
+    "avaliador não pode promover dry-run a passed sem evidência live"
+  ],
+  "out_of_scope": [
+    "live multi-step",
+    "loop longo",
+    "retry loop",
+    "scheduler",
+    "daemon",
+    "merge",
+    "push",
+    "deploy"
+  ]
+}

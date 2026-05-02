@@ -1,0 +1,34 @@
+{
+  "id": "057.M",
+  "name": "Expanded Canary Root Cause Maintenance V0",
+  "status": "implemented",
+  "objective": "Diagnosticar e corrigir a integracao de paths por tentativa no expanded-bounded-live-canary 30m/6 steps, sem executar live real.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "executed_live": false
+  },
+  "maintenance_checks": [
+    "prompt usa allowed_file em reports/expanded-bounded-live-canary/attempts/<attempt_id>/step-N.txt",
+    "step valida arquivo esperado no worktree",
+    "changed_files final e filtrado pela tentativa atual",
+    "arquivos antigos de attempts ou paths legados sao ignorados se ja existiam antes da tentativa",
+    "post-expansion-evaluate aceita paths por tentativa"
+  ],
+  "reports": {
+    "proof": "reports/expanded-canary-root-cause-maintenance-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

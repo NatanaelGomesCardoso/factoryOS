@@ -1,0 +1,20 @@
+{
+  "id": "062",
+  "name": "First MVP Capsule Build Canary V0",
+  "status": "planned",
+  "objective": "Executar um canary pequeno de build em cápsula sem aplicar no repo real.",
+  "command": "mvp-capsule-build-canary",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/first-mvp-capsule-build-canary-v0-proof.txt",
+    "generated": "reports/mvp-capsule-build-canaries/"
+  }
+}
+

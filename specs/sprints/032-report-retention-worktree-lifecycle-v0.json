@@ -1,0 +1,37 @@
+{
+  "sprint": 32,
+  "title": "Report Retention & Worktree Lifecycle V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "manual",
+  "objectives": [
+    "Indexar reports por tipo",
+    "Classificar reports antigos e candidatos a arquivamento",
+    "Classificar worktrees por lifecycle",
+    "Gerar maintenance plan combinado",
+    "Não apagar nem mover nada automaticamente"
+  ],
+  "reuse_first": [
+    "report_index",
+    "run_workspace",
+    "state_hygiene"
+  ],
+  "out_of_scope": [
+    "git worktree remove",
+    "git clean",
+    "git gc",
+    "limpeza automática"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/032-report-retention-worktree-lifecycle-v0.json",
+    "report-retention-plan",
+    "worktree-lifecycle-plan",
+    "factory-maintenance-plan",
+    "deleted_files=none",
+    "removed_worktrees=none",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

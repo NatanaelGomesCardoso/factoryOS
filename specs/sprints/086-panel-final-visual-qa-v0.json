@@ -1,0 +1,34 @@
+{
+  "sprint": "086-panel-final-visual-qa-v0",
+  "title": "Panel Final Visual QA V0",
+  "objective": "Rodar QA visual e estrutural final do painel local antes do release clean.",
+  "command": "panel-final-visual-qa --dry-run",
+  "checks": [
+    "panel_render",
+    "health",
+    "main_titles",
+    "status_cards",
+    "project_flow",
+    "read_only_links",
+    "safe_viewer",
+    "no_traceback_html",
+    "no_obvious_placeholders",
+    "css_loadable",
+    "responsive_structure",
+    "contrast_hierarchy_documented"
+  ],
+  "result": {
+    "visual_qa_decision": "passed",
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "constraints": {
+    "no_screenshot_required": true,
+    "read_only_panel": true,
+    "no_spa": true,
+    "no_external_dependencies": true,
+    "no_critical_rule_in_frontend": true
+  }
+}

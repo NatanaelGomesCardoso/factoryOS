@@ -1,0 +1,30 @@
+{
+  "sprint": "082",
+  "slug": "dashboard-information-architecture-polish-v0",
+  "title": "Dashboard Information Architecture Polish V0",
+  "objective": "Reorganizar o painel por finalidade operacional sem transformar o frontend em SPA.",
+  "scope": [
+    "app/templates/index.html",
+    "docs/panel-information-architecture.md",
+    "reports/dashboard-information-architecture-polish-v0-proof.txt"
+  ],
+  "groups": [
+    "Estado da fabrica",
+    "Projeto atual",
+    "Tasks/fila",
+    "Runs/capsulas",
+    "Reports/evidencias",
+    "Seguranca/gates",
+    "Proximos passos"
+  ],
+  "constraints": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "read_only_panel": true,
+    "no_external_dependencies": true,
+    "preserve_routes": true
+  },
+  "status": "implemented"
+}

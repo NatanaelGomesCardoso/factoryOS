@@ -1,0 +1,97 @@
+{
+  "id": "sprint-022-factory-start-dry-run-v0",
+  "title": "Factory Start Dry-Run V0",
+  "status": "planned",
+  "goal": "Criar o comando factory-start em modo dry-run, explícito e bounded, reaproveitando o Controlled Execution Loop V1 e mantendo live bloqueado.",
+  "features": [
+    {
+      "id": "feat-factory-start-022-001",
+      "title": "Criar CLI factory-start dry-run",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-start --dry-run --run-id <run-id> --max-steps 1 funciona",
+        "factory-start --dry-run --max-steps 1 usa seleção segura ou bloqueio seguro",
+        "factory-start --live retorna erro claro",
+        "max_steps aceita apenas valores entre 1 e 3",
+        "run_id com path traversal é bloqueado"
+      ]
+    },
+    {
+      "id": "feat-factory-start-022-002",
+      "title": "Gerar report auditável e mostrar no painel",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "reports/factory-start-dry-run-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "report JSON é salvo em reports/factory-starts/",
+        "report inclui hygiene_summary, status, decision e executed_live=false",
+        "o painel mostra o último Factory Start e continua read-only"
+      ]
+    },
+    {
+      "id": "feat-factory-start-022-003",
+      "title": "Registrar discovery, PRD, SPEC e sprint JSON",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-factory-start-dry-run-v0.md",
+        "specs/prd/factory-start-dry-run-v0-prd.md",
+        "specs/technical-spec/factory-start-dry-run-v0.md",
+        "specs/sprints/022-factory-start-dry-run-v0.json"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra reuso obrigatório",
+        "PRD e SPEC documentam o modo dry-run bounded",
+        "o sprint JSON registra riscos, validações e fora de escopo"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/022-factory-start-dry-run-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-prepare <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <RUN_ID>",
+    ".venv/bin/python -m app.cli factory-start --dry-run --run-id <RUN_ID> --max-steps 1",
+    ".venv/bin/python -m app.cli factory-start --dry-run --max-steps 1",
+    ".venv/bin/python -m app.cli factory-start --live",
+    ".venv/bin/python -m app.cli factory-start --dry-run --run-id ../oops --max-steps 1",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "seleção automática incorreta pode dar falsa segurança",
+    "report sem vínculo com o controlled loop dificulta auditoria",
+    "qualquer live nesta sprint seria regressão de escopo"
+  ],
+  "out_of_scope": [
+    "live Codex",
+    "daemon",
+    "scheduler",
+    "execução paralela",
+    "App Server",
+    "MCP",
+    "GitHub",
+    "Linear",
+    "deploy",
+    "push",
+    "merge",
+    "rebase",
+    "fetch",
+    "pull",
+    "API paga",
+    "secrets"
+  ]
+}

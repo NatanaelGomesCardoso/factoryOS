@@ -1,0 +1,38 @@
+{
+  "sprint": 44,
+  "title": "Quiet Runner Budget Calibration V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Separar budget do terminal visível e do log capturado",
+    "Tratar diff-like lines capturadas como warning quando aceitáveis",
+    "Manter compatibilidade com os comandos existentes",
+    "Gerar prova curta em reports"
+  ],
+  "reuse_first": [
+    "codex_quiet_runner",
+    "compact_execution_harness",
+    "output_budget",
+    "token_usage",
+    "cli"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "usar API paga",
+    "mudar harness global",
+    "apagar reports antigos",
+    "expor segredos"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s044.txt",
+    ".venv/bin/python -m json.tool specs/sprints/044-quiet-runner-budget-calibration-v0.json > <TMP_DIR>/s044-json-check.txt",
+    "Criar sample logs com terminal limpo e captured com diff-like lines",
+    ".venv/bin/python -m app.cli compact-exec-check --mode terminal --log <PATH> --category code_small > <TMP_DIR>/s044-terminal-check.json",
+    ".venv/bin/python -m app.cli compact-exec-check --mode captured --log <PATH> --category code_small > <TMP_DIR>/s044-captured-check.json",
+    "FACTORYOS_ENABLE_QUIET_CODEX=1 .venv/bin/python -m app.cli codex-quiet-run --prompt-file <TMP_DIR>/quiet-calibration.prompt --cwd <FACTORYOS_ROOT> --model gpt-5.4-mini --reasoning low --sandbox read-only --approval never --label s044-calibration --execute --no-push --no-deploy --no-paid-api --no-secrets > <TMP_DIR>/s044-quiet-run.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

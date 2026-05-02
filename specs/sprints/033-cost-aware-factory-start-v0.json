@@ -1,0 +1,43 @@
+{
+  "sprint": 33,
+  "title": "Cost-Aware Factory Start V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Integrar routing contracts ao factory-start",
+    "Consultar codex-plan e codex-context",
+    "Consultar maintenance plan e cost audit",
+    "Adicionar --plan-only e --cost-aware",
+    "Manter live explicitamente bloqueado"
+  ],
+  "reuse_first": [
+    "factory_start",
+    "long_run_planner",
+    "maintenance_plan",
+    "codex_profile",
+    "codex_context_router",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "deploy",
+    "push",
+    "mudar harness"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/033-cost-aware-factory-start-v0.json",
+    "codex-cost-audit",
+    "run-workspace-prepare/readiness/sync-plan",
+    "factory-start --plan-only --cost-aware",
+    "factory-start --dry-run --cost-aware --evaluate",
+    "factory-start --live --cost-aware",
+    "path traversal em factory-start",
+    "TestClient GET / = 200",
+    "git diff --check",
+    "harness global-doctor --strict",
+    "harness doctor --source-root <HARNESS_ROOT> --strict"
+  ]
+}

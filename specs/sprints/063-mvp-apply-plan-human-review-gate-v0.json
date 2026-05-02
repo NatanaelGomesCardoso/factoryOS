@@ -1,0 +1,20 @@
+{
+  "id": "063",
+  "name": "MVP Apply Plan & Human Review Gate V0",
+  "status": "planned",
+  "objective": "Criar um plano de aplicação com revisão humana obrigatória antes de qualquer mudança real.",
+  "command": "mvp-apply-plan-create",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/mvp-apply-plan-human-review-gate-v0-proof.txt",
+    "generated": "reports/mvp-apply-plans/"
+  }
+}
+

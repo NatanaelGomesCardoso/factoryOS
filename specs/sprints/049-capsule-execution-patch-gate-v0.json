@@ -1,0 +1,41 @@
+{
+  "sprint": 49,
+  "title": "Capsule Execution & Patch Gate V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Executar Codex dentro da cápsula",
+    "Registrar tokens e saída sem imprimir patch bruto",
+    "Salvar diff da cápsula em arquivo",
+    "Gerar plano de exportação restrito ao manifest",
+    "Manter apply apenas em dry-run"
+  ],
+  "reuse_first": [
+    "codex_capsule_execution",
+    "codex_context_capsule",
+    "codex_quiet_runner",
+    "report_index",
+    "cli"
+  ],
+  "out_of_scope": [
+    "aplicar mudanças no repo real",
+    "deploy",
+    "push/pull/fetch/rebase",
+    "usar API paga",
+    "mexer em secrets"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s049.txt",
+    ".venv/bin/python -m json.tool specs/sprints/049-capsule-execution-patch-gate-v0.json > <TMP_DIR>/s049-json-check.txt",
+    "codex-capsule-run em canário pequeno",
+    "codex-capsule-diff",
+    "codex-capsule-export-plan",
+    "codex-capsule-apply --dry-run",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/capsule-execution-patch-gate-v0-proof.txt",
+  "proof_path": "reports/capsule-execution-patch-gate-v0-proof.txt"
+}

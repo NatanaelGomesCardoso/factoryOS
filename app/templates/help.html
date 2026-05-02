@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Ajuda - FactoryOS{% endblock %}
+{% block content %}
+<header class="command-hero">
+  <div class="command-copy">
+    <p class="brand">FactoryOS</p>
+    <h1>Ajuda local</h1>
+    <p class="lead">Documentacao navegavel, local-first e read-only. Esta area nao executa comandos, nao carrega JS externo e nao renderiza HTML bruto dos arquivos Markdown.</p>
+    <div class="hero-actions">
+      <a class="button-link" href="{{ url_for('index') }}">Painel</a>
+      <a class="button-link" href="{{ url_for('help_doc', doc_slug='getting-started') }}">Primeiros passos</a>
+      <a class="button-link" href="{{ url_for('help_doc', doc_slug='commands') }}">Comandos</a>
+    </div>
+  </div>
+  <aside class="status-card">
+    <h2>Contrato</h2>
+    <dl>
+      <div><dt>Modo</dt><dd>read-only</dd></div>
+      <div><dt>Slugs</dt><dd>allowlist</dd></div>
+      <div><dt>Mermaid</dt><dd>codigo legivel</dd></div>
+    </dl>
+  </aside>
+</header>
+
+<main class="help-grid" aria-label="Documentos de ajuda">
+  {% for doc in docs %}
+  <article class="help-card">
+    <p class="eyebrow">{{ doc.slug }}</p>
+    <h2><a href="{{ url_for('help_doc', doc_slug=doc.slug) }}">{{ doc.title }}</a></h2>
+    <p>{{ doc.description }}</p>
+    <p class="metric-path">{{ doc.path }}</p>
+  </article>
+  {% endfor %}
+</main>
+{% endblock %}

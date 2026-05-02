@@ -1,0 +1,19 @@
+{
+  "id": "070",
+  "name": "MVP Delivery Package V0",
+  "status": "planned",
+  "objective": "Gerar localmente um pacote de entrega do MVP sem zip real nem deploy.",
+  "command": "mvp-delivery-package-create",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/mvp-delivery-package-v0-proof.txt",
+    "generated": "reports/mvp-delivery-packages/"
+  }
+}

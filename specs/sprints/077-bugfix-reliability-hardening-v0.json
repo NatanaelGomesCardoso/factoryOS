@@ -1,0 +1,59 @@
+{
+  "id": "077",
+  "title": "Bugfix & Reliability Hardening V0",
+  "status": "planned",
+  "goal": "Melhorar confiabilidade dos comandos V1 sem criar feature grande.",
+  "features": [
+    {
+      "id": "feat-reliability-hardening-001",
+      "title": "Adicionar reliability check V1 em dry-run",
+      "status": "planned",
+      "files": [
+        "app/v1_reliability.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-reliability-check existe",
+        "factoryos-v1-reliability-check aceita --dry-run",
+        "o report retorna reliability_decision",
+        "warning budget permanece sucesso com warning",
+        "painel abre",
+        "executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-reliability-hardening-002",
+      "title": "Registrar docs de confiabilidade",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-reliability-hardening.md",
+        "specs/sprints/077-bugfix-reliability-hardening-v0.json",
+        "reports/bugfix-reliability-hardening-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "documentacao descreve o comando",
+        "proof registra validacoes executadas",
+        "outputs permanecem compactos"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m app.cli factoryos-v1-reliability-check --dry-run",
+    "python -m app.cli factoryos-v1-readiness-gate --dry-run",
+    "python tests/test_quiet_runner_status_contract.py",
+    "python -m json.tool specs/sprints/077-bugfix-reliability-hardening-v0.json",
+    "python -m py_compile app/*.py",
+    "python -m compileall app tests",
+    "git diff --check"
+  ],
+  "risks": [
+    "pytest pode nao estar instalado para testes que dependem de fixtures"
+  ],
+  "out_of_scope": [
+    "feature grande",
+    "mudanca arquitetural",
+    "push",
+    "deploy",
+    "API paga"
+  ]
+}

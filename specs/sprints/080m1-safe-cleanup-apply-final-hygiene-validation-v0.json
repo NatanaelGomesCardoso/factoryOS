@@ -1,0 +1,25 @@
+{
+  "sprint": "080.M.1",
+  "title": "Safe Cleanup Apply & Final Hygiene Validation V0",
+  "status": "implemented",
+  "objective": "Gerar plano de limpeza e validar apply dry-run sem apagar caminhos reais externos.",
+  "commands": [
+    "factoryos-cleanup-plan --audit-report <PATH> --dry-run",
+    "factoryos-cleanup-apply --cleanup-plan <PATH> --dry-run",
+    "factoryos-cleanup-validate --dry-run"
+  ],
+  "outputs": [
+    "reports/deep-hygiene-cleanup-plans/<timestamp>.json",
+    "reports/deep-hygiene-cleanup-validations/<timestamp>.json",
+    "reports/safe-cleanup-apply-final-hygiene-validation-v0-proof.txt"
+  ],
+  "safety": {
+    "fixture_root": "<TMP_DIR>/factoryos-cleanup-fixture",
+    "applied_real": false,
+    "no_external_real_delete": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  }
+}

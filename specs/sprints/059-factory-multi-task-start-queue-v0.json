@@ -1,0 +1,32 @@
+{
+  "id": "059",
+  "name": "Factory Multi-Task Start Queue V0",
+  "status": "implemented",
+  "objective": "Criar uma fila curta controlada para iniciar multiplas tasks no FactoryOS sem automacao solta.",
+  "command": "factory-queue-start",
+  "limits": {
+    "max_tasks": 3,
+    "max_tasks_cap": 5,
+    "max_steps_per_task": 1
+  },
+  "routing": {
+    "docs_only": "capsule",
+    "code_small": "capsule",
+    "security_review": "full_repo_review_or_blocked",
+    "heavy_review_only": "full_repo_review_or_blocked",
+    "live_canary": "gated_only"
+  },
+  "safety": {
+    "dry_run": true,
+    "plan_only": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/factory-multi-task-start-queue-v0-proof.txt",
+    "queue": "reports/factory-queue-starts/"
+  }
+}

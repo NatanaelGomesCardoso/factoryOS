@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Logs e runtime local
+*.log
+logs/*.log
+reports/*.tmp
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+runs/
+workspaces/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.token
+auth.json
+
+# Node / frontend futuro
+node_modules/
+dist/
+build/
+.next/
+.vite/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Codex raw execution logs
+reports/codex/

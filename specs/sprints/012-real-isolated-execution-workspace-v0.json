@@ -1,0 +1,100 @@
+{
+  "id": "sprint-012-real-isolated-execution-workspace-v0",
+  "title": "Real Isolated Execution Workspace V0",
+  "status": "planned",
+  "goal": "Criar workspace real isolado por run usando git worktree e branch dedicada, mantendo live do Codex bloqueado e preservando o painel read-only.",
+  "features": [
+    {
+      "id": "feat-real-isolated-001",
+      "title": "Preparar worktree real por run",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-workspace-prepare exige run running",
+        "run-workspace-prepare exige git status limpo no repo principal",
+        "run-workspace-prepare cria branch factoryos/run/<run-id>",
+        "run-workspace-prepare cria worktree em workspaces/runs/<run-id>",
+        "run-workspace-prepare nunca apaga dados automaticamente"
+      ]
+    },
+    {
+      "id": "feat-real-isolated-002",
+      "title": "Expor status do workspace",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-workspace-status mostra se o workspace existe",
+        "run-workspace-status mostra se e um git worktree",
+        "run-workspace-status mostra branch, caminho relativo e estado de limpeza",
+        "run-workspace-status nao altera nada"
+      ]
+    },
+    {
+      "id": "feat-real-isolated-003",
+      "title": "Atualizar handoff e painel",
+      "status": "planned",
+      "files": [
+        "app/codex_handoff.py",
+        "app/panel_data.py",
+        "app/templates/index.html"
+      ],
+      "acceptanceCriteria": [
+        "run-handoff reconhece workspace preparado",
+        "run-execute --dry-run continua seguro",
+        "o report registra workspace_kind e workspace_branch quando disponiveis",
+        "o painel mostra workspace_kind, workspace_branch e workspace_state"
+      ]
+    },
+    {
+      "id": "feat-real-isolated-004",
+      "title": "Registrar prova da sprint",
+      "status": "planned",
+      "files": [
+        "reports/real-isolated-execution-workspace-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o proof registra os comandos executados",
+        "o proof registra a run usada e o worktree criado",
+        "o proof confirma que Codex live nao foi executado",
+        "o proof registra riscos e pendencias"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/012-real-isolated-execution-workspace-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-prepare <run-id>",
+    ".venv/bin/python -m app.cli run-workspace-status <run-id>",
+    ".venv/bin/python -m app.cli run-handoff <run-id>",
+    ".venv/bin/python -m app.cli run-execute <run-id> --dry-run",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ],
+  "risks": [
+    "repo principal sujo impede criar worktree",
+    "workspace populado que nao seja worktree esperado deve ser bloqueado",
+    "branch local fora do prefixo permitido deve ser recusada",
+    "execucao live continua bloqueada"
+  ],
+  "out_of_scope": [
+    "execucao live do Codex",
+    "daemon",
+    "scheduler",
+    "App Server",
+    "MCP",
+    "integracao GitHub/Linear",
+    "execucao paralela",
+    "deploy"
+  ]
+}

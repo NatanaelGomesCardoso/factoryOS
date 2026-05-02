@@ -1,0 +1,74 @@
+{
+  "id": "sprint-009-autonomous-factory-control-plane-v0",
+  "title": "Autonomous Factory Control Plane V0",
+  "status": "planned",
+  "goal": "Estruturar a control plane local-first do FactoryOS com org chart, goals, budgets, governance e heartbeats futuros, usando Symphony apenas como blueprint e Paperclip como referencia de padroes, sem execucao automatica de Codex.",
+  "features": [
+    {
+      "id": "feat-autonomous-control-plane-001",
+      "title": "Documentar a control plane local-first",
+      "status": "planned",
+      "files": [
+        "docs/architecture/autonomous-factory-control-plane.md",
+        "WORKFLOW.md"
+      ],
+      "acceptanceCriteria": [
+        "o documento compara Symphony, Paperclip e FactoryOS",
+        "o workflow registra o fluxo local-first sem microaprovacoes",
+        "o documento explicita o papel do ChatGPT web, FactoryOS e Codex CLI",
+        "nenhuma execucao automatica e introduzida"
+      ]
+    },
+    {
+      "id": "feat-autonomous-control-plane-002",
+      "title": "Definir budgets e governance",
+      "status": "planned",
+      "files": [
+        "specs/prd/autonomous-factory-control-plane-v0-prd.md",
+        "specs/technical-spec/autonomous-factory-control-plane-v0.md"
+      ],
+      "acceptanceCriteria": [
+        "os budgets contem max_codex_runs, max_retry_attempts, max_changed_files, max_minutes, model, reasoning_effort e stop_on_security_risk",
+        "a governanca separa acoes livres, gate final e acoes bloqueadas",
+        "o usuario aprova apenas PR ou final review",
+        "os bloqueios cobrem deploy, secrets, billing, infraestrutura publica, configuracao global, apagar dados e API paga"
+      ]
+    },
+    {
+      "id": "feat-autonomous-control-plane-003",
+      "title": "Especificar o heartbeat futuro",
+      "status": "planned",
+      "files": [
+        "docs/architecture/autonomous-factory-control-plane.md",
+        "specs/technical-spec/autonomous-factory-control-plane-v0.md"
+      ],
+      "acceptanceCriteria": [
+        "o comando futuro factory-tick e descrito",
+        "o fluxo menciona checar task running, criar run, chamar executor adapter, validar, avaliar, decidir e atualizar painel",
+        "o contrato deixa claro que nao ha implementacao de heartbeat nesta sprint",
+        "o escopo fora de sprint inclui daemon, scheduler, App Server, MCP, GitHub/Linear, execucao paralela e deploy"
+      ]
+    },
+    {
+      "id": "feat-autonomous-control-plane-004",
+      "title": "Registrar prova e roadmap",
+      "status": "planned",
+      "files": [
+        "reports/autonomous-control-plane-v0-proof.txt",
+        "specs/roadmap/factoryos-roadmap.md"
+      ],
+      "acceptanceCriteria": [
+        "o roadmap aponta Sprint 009 a Sprint 012 com os nomes corretos",
+        "o proof registra as validacoes executadas",
+        "o proof marca qualquer lacuna como pendente quando necessario",
+        "o plano nao adiciona dependencia ou execucao automatica"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m json.tool specs/sprints/009-autonomous-factory-control-plane-v0.json",
+    "python -m app.cli task-list",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "sprint": "084-panel-interaction-usability-polish-v0",
+  "title": "Panel Interaction & Usability Polish V0",
+  "objective": "Melhorar interacao, labels, empty states, foco e leitura operacional do painel local read-only.",
+  "scope": [
+    "app/panel_usability.py",
+    "app/cli.py",
+    "app/templates/index.html",
+    "app/static/style.css",
+    "docs/panel-interaction-usability-polish.md",
+    "reports/panel-interaction-usability-polish-v0-proof.txt"
+  ],
+  "command": "panel-usability-check --dry-run",
+  "result": {
+    "usability_decision": "passed",
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "constraints": {
+    "read_only_panel": true,
+    "no_spa": true,
+    "no_external_dependencies": true,
+    "no_critical_rule_in_frontend": true
+  }
+}

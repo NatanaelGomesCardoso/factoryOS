@@ -1,0 +1,20 @@
+{
+  "id": "060",
+  "name": "First MVP Project Intake From PRD SPEC Sprints V0",
+  "status": "planned",
+  "objective": "Criar um intake minimo de MVP a partir de PRD, SPEC e sprints sem construir produto real completo.",
+  "command": "project-intake-create",
+  "template": "simple-web-mvp",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/first-mvp-project-intake-v0-proof.txt",
+    "generated": "reports/project-intakes/"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "sprint": "088",
+  "title": "Clean Public V1 Export V0",
+  "objective": "Criar mecanismo local de export limpo do FactoryOS sem publicar e sem incluir reports, workspaces, caches ou secrets.",
+  "status": "implemented",
+  "commands": [
+    "clean-public-export-plan --dry-run",
+    "clean-public-export-create --dry-run",
+    "clean-public-export-validate --dry-run"
+  ],
+  "created_files": [
+    "app/clean_export.py",
+    "docs/clean-public-v1-export.md",
+    "specs/sprints/088-clean-public-v1-export-v0.json",
+    "reports/clean-public-v1-export-v0-proof.txt"
+  ],
+  "changed_files": [
+    "app/cli.py"
+  ],
+  "export_contract": {
+    "export_path": "<FACTORYOS_CLEAN_EXPORT>",
+    "overwrite_existing": false,
+    "create_remote": false,
+    "push_allowed": false,
+    "safe_to_publish": false,
+    "human_review_required": true
+  },
+  "include": [
+    "app/",
+    "templates/",
+    "static/",
+    "docs/",
+    "essential specs",
+    "README.md",
+    "requirements.txt",
+    "pyproject.toml",
+    "LICENSE",
+    "safe examples"
+  ],
+  "exclude": [
+    "reports/",
+    "workspaces/",
+    ".venv/",
+    "__pycache__/",
+    ".pytest_cache/",
+    ".mypy_cache/",
+    ".ruff_cache/",
+    "logs/",
+    "*.log",
+    "tmp artifacts",
+    "codex run outputs",
+    "secrets",
+    ".env",
+    "backup tarballs",
+    "operational capsules"
+  ],
+  "result_contract": {
+    "export_decision": [
+      "ready",
+      "needs_review",
+      "failed"
+    ],
+    "safe_to_publish": false,
+    "human_review_required": true
+  },
+  "validation_plan": [
+    "py_compile",
+    "compileall app",
+    "json.tool specs/sprints/088-clean-public-v1-export-v0.json",
+    "clean-public-export-plan --dry-run",
+    "clean-public-export-create --dry-run",
+    "clean-public-export-validate --dry-run",
+    "git diff --check"
+  ],
+  "report_path": "reports/clean-public-v1-export-v0-proof.txt"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "072",
+  "name": "Report Retention & Cleanup Policy V1",
+  "status": "planned",
+  "objective": "Criar política segura de retenção e limpeza de reports sem apagar automaticamente.",
+  "command": "report-retention-audit",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "safe_to_apply": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/report-retention-cleanup-policy-v1-proof.txt",
+    "generated": "reports/report-retention/"
+  }
+}

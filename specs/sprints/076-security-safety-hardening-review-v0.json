@@ -1,0 +1,57 @@
+{
+  "id": "076",
+  "title": "Security & Safety Hardening Review V0",
+  "status": "planned",
+  "goal": "Endurecer os contratos de seguranca e safety da V1 sem criar feature grande.",
+  "features": [
+    {
+      "id": "feat-security-safety-hardening-001",
+      "title": "Adicionar security review V1 em dry-run",
+      "status": "planned",
+      "files": [
+        "app/v1_security_review.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-security-review existe",
+        "factoryos-v1-security-review aceita --dry-run",
+        "o report retorna security_decision",
+        "artifact intake bloqueia extensao perigosa",
+        "viewer bloqueia traversal",
+        "executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-security-safety-hardening-002",
+      "title": "Registrar docs de hardening",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-security-hardening.md",
+        "specs/sprints/076-security-safety-hardening-review-v0.json",
+        "reports/security-safety-hardening-review-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "documentacao descreve gates defensivos",
+        "proof registra validacoes executadas",
+        "segredos e regra critica continuam fora do frontend"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m app.cli factoryos-v1-security-review --dry-run",
+    "python -m json.tool specs/sprints/076-security-safety-hardening-review-v0.json",
+    "python -m py_compile app/*.py",
+    "python -m compileall app tests",
+    "git diff --check"
+  ],
+  "risks": [
+    "scan textual pode gerar falso positivo e exigir revisao humana"
+  ],
+  "out_of_scope": [
+    "deploy",
+    "push",
+    "API paga",
+    "alteracao de secrets",
+    "aplicacao real de planos"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "sprint": 45,
+  "title": "Quiet Runner First Real Sprint Execution V0",
+  "status": "planned",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Executar um canário real mínimo via quiet runner",
+    "Registrar changed_files antes e depois",
+    "Validar a allowlist de arquivos",
+    "Manter o terminal compacto"
+  ],
+  "reuse_first": [
+    "codex_quiet_runner",
+    "compact_execution_harness",
+    "execution_evaluator",
+    "codex_handoff",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "fazer push",
+    "fazer deploy",
+    "usar API paga",
+    "tocar em segredos",
+    "alterar mais de um arquivo"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s045.txt",
+    ".venv/bin/python -m json.tool specs/sprints/045-quiet-runner-first-real-sprint-execution-v0.json > <TMP_DIR>/s045-json-check.txt",
+    "FACTORYOS_ENABLE_QUIET_CODEX=1 .venv/bin/python -m app.cli codex-quiet-run --prompt-file <TMP_DIR>/quiet-first-real-sprint.prompt --cwd <FACTORYOS_ROOT> --model gpt-5.4-mini --reasoning low --sandbox workspace-write --approval never --label s045-first-real-sprint --execute --allowed-path reports/quiet-runner-first-real-sprint/canary.txt --no-push --no-deploy --no-paid-api --no-secrets > <TMP_DIR>/s045-quiet-run.json",
+    "Validar changed_files_ok=true",
+    "Validar terminal_ok=true",
+    "Validar overall_status em ok ou ok_with_captured_warnings",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

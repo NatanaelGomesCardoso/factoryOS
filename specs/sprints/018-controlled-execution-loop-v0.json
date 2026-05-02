@@ -1,0 +1,101 @@
+{
+  "id": "sprint-018-controlled-execution-loop-v0",
+  "title": "Controlled Execution Loop V0",
+  "status": "planned",
+  "goal": "Criar um loop local, explícito e síncrono que executa um passo limitado da fábrica em dry-run, conectando readiness, sync plan, factory tick, evaluator e reports, sem live Codex, sem daemon e sem scheduler.",
+  "features": [
+    {
+      "id": "feat-controlled-loop-001",
+      "title": "Executar loop controlado local",
+      "status": "planned",
+      "files": [
+        "app/controlled_loop.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-loop aceita --run-id e --max-steps",
+        "factory-loop seleciona uma run running única quando --run-id não for informado",
+        "factory-loop bloqueia múltiplas runs running sem decidir sozinho",
+        "factory-loop bloqueia path traversal e run inexistente",
+        "factory-loop bloqueia live com erro claro",
+        "factory-loop checa readiness e sync plan antes do tick",
+        "factory-loop chama factory-tick em dry-run",
+        "factory-loop tenta avaliar o report do tick",
+        "factory-loop grava report em reports/factory-loops/",
+        "factory-loop mantém executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-controlled-loop-002",
+      "title": "Exibir ultimo Controlled Loop no painel",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html"
+      ],
+      "acceptanceCriteria": [
+        "o painel mostra o ultimo Controlled Loop válido",
+        "o painel exibe loop status, decision, run id, max_steps, steps_executed, executed_live, readiness e sync plan",
+        "o painel oferece link para o report quando disponível",
+        "o painel continua read-only"
+      ]
+    },
+    {
+      "id": "feat-controlled-loop-003",
+      "title": "Registrar discovery, PRD, SPEC, sprint JSON e proof",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-controlled-execution-loop-v0.md",
+        "specs/prd/controlled-execution-loop-v0-prd.md",
+        "specs/technical-spec/controlled-execution-loop-v0.md",
+        "specs/sprints/018-controlled-execution-loop-v0.json",
+        "reports/controlled-execution-loop-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra Reuse First",
+        "PRD e SPEC descrevem o loop V0 local e síncrono",
+        "a sprint JSON documenta features, validações, riscos e fora de escopo",
+        "o proof registra comandos, report gerado e validações"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/018-controlled-execution-loop-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-readiness <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <RUN_ID>",
+    ".venv/bin/python -m app.cli factory-loop --run-id <RUN_ID> --max-steps 1 --dry-run",
+    ".venv/bin/python -m json.tool reports/factory-loops/<loop-id>.json",
+    ".venv/bin/python -m app.cli factory-loop --run-id <RUN_ID> --live",
+    ".venv/bin/python -m app.cli factory-loop --run-id ../oops --dry-run",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; TestClient(app, base_url='http://127.0.0.1').get('/')\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "run fora de ready ou sync plan fora de already_current precisa bloquear o loop",
+    "a seleção automática sem run-id precisa recusar ambiguidade quando houver mais de uma run running",
+    "o report de avaliação pode ficar vazio se o tick não gerar um source report adequado",
+    "o painel precisa continuar read-only e sem mutação"
+  ],
+  "out_of_scope": [
+    "daemon",
+    "scheduler",
+    "factory-start",
+    "retry loop",
+    "live Codex",
+    "merge para master",
+    "rebase",
+    "fetch/pull",
+    "deploy",
+    "API paga",
+    "secrets",
+    "GitHub/Linear",
+    "execução paralela",
+    "MCP"
+  ]
+}

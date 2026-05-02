@@ -1,0 +1,37 @@
+{
+  "sprint": 53,
+  "title": "Cheap Task Factory E2E Gate V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Provar o fluxo barato ponta a ponta para docs_only/code_small",
+    "Criar cápsula mínima e executar canário curto",
+    "Gerar diff, export-plan e status normalizado sem aplicar no repo real"
+  ],
+  "reuse_first": [
+    "capsule_execution_policy",
+    "codex_context_capsule",
+    "codex_capsule_execution",
+    "cheap_task_factory_e2e",
+    "cli"
+  ],
+  "out_of_scope": [
+    "aplicar mudanças no repo real",
+    "deploy",
+    "push/pull/fetch/rebase",
+    "usar API paga",
+    "mexer em secrets"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s053.txt",
+    ".venv/bin/python -m json.tool specs/sprints/053-cheap-task-factory-e2e-gate-v0.json > <TMP_DIR>/s053-json-check.txt",
+    ".venv/bin/python -m app.cli cheap-task-factory-e2e --category docs_only --label s053-canary --dry-run > <TMP_DIR>/s053-dry-run.json",
+    ".venv/bin/python -m app.cli cheap-task-factory-e2e --category docs_only --label s053-canary --execute-canary > <TMP_DIR>/s053-execute-canary.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/cheap-task-factory-e2e-gate-v0-proof.txt",
+  "proof_path": "reports/cheap-task-factory-e2e-gate-v0-proof.txt"
+}

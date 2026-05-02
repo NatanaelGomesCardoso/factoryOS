@@ -1,0 +1,36 @@
+{
+  "sprint": 42,
+  "title": "Codex CLI Output Suppression & Quiet Runner V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Criar runner local silencioso para Codex CLI",
+    "Capturar stdout e stderr em arquivo",
+    "Extrair métricas compactas e diff-like lines",
+    "Bloquear saída grande no terminal"
+  ],
+  "reuse_first": [
+    "output_budget",
+    "token_usage",
+    "codex_handoff",
+    "factory_start",
+    "codex_context_router"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "usar API paga",
+    "despejar patch no terminal",
+    "mudar harness global"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s042.txt",
+    ".venv/bin/python -m json.tool specs/sprints/042-codex-cli-output-suppression-quiet-runner-v0.json > <TMP_DIR>/s042-json-check.txt",
+    ".venv/bin/python -m app.cli codex-quiet-run --prompt-file <TMP_DIR>/quiet-runner-ok.prompt --cwd <FACTORYOS_ROOT> --model gpt-5.4-mini --reasoning low --sandbox read-only --approval never --label s042-dry-run --dry-run > <TMP_DIR>/s042-quiet-dry-run.json",
+    "FACTORYOS_ENABLE_QUIET_CODEX=1 .venv/bin/python -m app.cli codex-quiet-run --prompt-file <TMP_DIR>/quiet-runner-ok.prompt --cwd <FACTORYOS_ROOT> --model gpt-5.4-mini --reasoning low --sandbox read-only --approval never --label s042-real-canary --execute > <TMP_DIR>/s042-quiet-real-run.json",
+    ".venv/bin/python -m app.cli codex-quiet-ab-report --log-a <VISIBLE_LOG> --log-b <SUPPRESSED_LOG>",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

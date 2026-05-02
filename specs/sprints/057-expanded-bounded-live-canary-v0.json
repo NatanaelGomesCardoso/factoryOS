@@ -1,0 +1,26 @@
+{
+  "id": "057",
+  "name": "Expanded Bounded Live Canary 30m 6 Steps V0",
+  "status": "planned",
+  "objective": "Executar o próximo nível controlado de live canary com 30m e 6 steps, mantendo os gates seguros e econômicos.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/expanded-bounded-live-canary-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

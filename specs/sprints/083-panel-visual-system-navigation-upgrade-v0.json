@@ -1,0 +1,23 @@
+{
+  "sprint": "083",
+  "slug": "panel-visual-system-navigation-upgrade-v0",
+  "title": "Panel Visual System & Navigation Upgrade V0",
+  "objective": "Aplicar sistema visual profissional e navegacao simples ao painel FactoryOS.",
+  "scope": [
+    "app/static/style.css",
+    "app/templates/index.html",
+    "docs/panel-visual-system-navigation.md",
+    "reports/panel-visual-system-navigation-upgrade-v0-proof.txt"
+  ],
+  "visual_direction": "dev/hacker sobrio, dark utilitario, command center local, status legiveis e cards densos.",
+  "constraints": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "read_only_panel": true,
+    "no_external_dependencies": true,
+    "no_complex_spa": true
+  },
+  "status": "implemented"
+}

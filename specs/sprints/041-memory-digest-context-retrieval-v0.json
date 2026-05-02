@@ -1,0 +1,38 @@
+{
+  "sprint": 41,
+  "title": "Memory Digest & Context Retrieval V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Criar digest curto de memória com JSON e Markdown",
+    "Fazer o router preferir o digest mais recente",
+    "Evitar reports grandes por padrão no contexto",
+    "Expor digests por CLI"
+  ],
+  "reuse_first": [
+    "codex_context_router",
+    "codex_handoff",
+    "report_index",
+    "token_usage",
+    "output_budget"
+  ],
+  "out_of_scope": [
+    "banco novo",
+    "serviço externo",
+    "mudar harness",
+    "usar API paga",
+    "executar live"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s041.txt",
+    ".venv/bin/python -m json.tool specs/sprints/041-memory-digest-context-retrieval-v0.json > <TMP_DIR>/s041-json-check.txt",
+    ".venv/bin/python -m app.cli memory-digest-create --title \"Sprint 040 Token Economy Output Budget V0\" --sprint 040 --source-report reports/token-economy-output-budget-v0-proof.txt > <TMP_DIR>/memory-digest-create.json",
+    ".venv/bin/python -m app.cli memory-digest-latest > <TMP_DIR>/memory-digest-latest.json",
+    ".venv/bin/python -m app.cli memory-digest-list --limit 5 > <TMP_DIR>/memory-digest-list.json",
+    ".venv/bin/python -m app.cli codex-context --run-id <RUN_ID> > <TMP_DIR>/codex-context-s041.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

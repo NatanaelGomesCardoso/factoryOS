@@ -1,0 +1,63 @@
+{
+  "id": "sprint-005-panel-file-viewer",
+  "title": "Visualização segura de docs e reports no painel",
+  "status": "planned",
+  "goal": "Permitir visualizar arquivos úteis no painel mantendo validação backend e modo read-only.",
+  "features": [
+    {
+      "id": "feat-file-viewer-001",
+      "title": "Criar rota backend segura de visualização",
+      "status": "planned",
+      "files": [
+        "app/web.py"
+      ],
+      "acceptanceCriteria": [
+        "abre arquivo permitido em reports",
+        "abre arquivo permitido em docs ou specs",
+        "bloqueia area desconhecida",
+        "bloqueia path traversal",
+        "bloqueia arquivo inexistente",
+        "bloqueia symlink",
+        "bloqueia arquivo oculto ou sensível"
+      ]
+    },
+    {
+      "id": "feat-file-viewer-002",
+      "title": "Criar página read-only de arquivo",
+      "status": "planned",
+      "files": [
+        "app/templates/file_view.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "mostra metadados do arquivo",
+        "mostra conteúdo textual escapado",
+        "não executa HTML",
+        "mostra mensagem segura para arquivo grande ou não textual"
+      ]
+    },
+    {
+      "id": "feat-file-viewer-003",
+      "title": "Adicionar links de visualização no painel",
+      "status": "planned",
+      "files": [
+        "app/templates/index.html"
+      ],
+      "acceptanceCriteria": [
+        "reports recentes têm link de visualização",
+        "docs úteis têm link de visualização",
+        "links apontam para rota backend validada"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m py_compile app/*.py",
+    "python -m compileall app",
+    "TestClient com base_url http://127.0.0.1",
+    "GET /view/reports/evaluator-cli-panel-check.json retorna 200",
+    "GET /view/reports/../requirements.txt retorna 404 ou 400",
+    "GET /view/reports/arquivo-inexistente.json retorna 404",
+    "HTML de arquivo é exibido como texto escapado",
+    "git diff --check"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "sprint": 38,
+  "title": "Expanded Long Run Rehearsal 30m 6 Steps V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Criar rehearsal expandido 30m/6 steps em dry-run",
+    "Consumir a policy aprovada da Sprint 037",
+    "Consolidar custo, contexto, maintenance, readiness, sync e policy de expansão",
+    "Não executar live"
+  ],
+  "reuse_first": [
+    "long_run_rehearsal",
+    "long_run_expansion_policy",
+    "maintenance_plan",
+    "state_hygiene",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "abrir daemon",
+    "abrir scheduler",
+    "deploy",
+    "push",
+    "mudar harness"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/038-expanded-long-run-rehearsal-30m-6steps-v0.json",
+    ".venv/bin/python -m app.cli expanded-long-run-rehearsal --dry-run --run-id <RUN_ID> --target-minutes 30 --max-steps 6",
+    ".venv/bin/python -m app.cli expanded-long-run-rehearsal --dry-run --run-id ../oops --target-minutes 30 --max-steps 6",
+    ".venv/bin/python -m app.cli expanded-long-run-rehearsal --dry-run --run-id <RUN_ID> --target-minutes 29 --max-steps 6",
+    ".venv/bin/python -m app.cli expanded-long-run-rehearsal --dry-run --run-id <RUN_ID> --target-minutes 30 --max-steps 5",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

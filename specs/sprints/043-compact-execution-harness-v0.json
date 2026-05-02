@@ -1,0 +1,37 @@
+{
+  "sprint": 43,
+  "title": "Compact Execution Harness V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Criar budgets compactos por categoria",
+    "Bloquear logs acima do budget",
+    "Gerar report consolidado de execução compacta",
+    "Integrar a recomendação de quiet runner no handoff"
+  ],
+  "reuse_first": [
+    "codex_quiet_runner",
+    "output_budget",
+    "token_usage",
+    "codex_handoff",
+    "factory_start"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "mudar política de 30m/6 steps",
+    "remover comandos antigos",
+    "usar API paga"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s043.txt",
+    ".venv/bin/python -m json.tool specs/sprints/043-compact-execution-harness-v0.json > <TMP_DIR>/s043-json-check.txt",
+    ".venv/bin/python -m app.cli compact-exec-budget > <TMP_DIR>/compact-exec-budget.json",
+    ".venv/bin/python -m app.cli compact-exec-check --log <TMP_DIR>/codex-runs/factoryos-ab-diff-visible-20260501-135038.log --category code_small > <TMP_DIR>/compact-exec-check-visible.json || true",
+    ".venv/bin/python -m app.cli compact-exec-check --log <TMP_DIR>/codex-runs/factoryos-ab-diff-suppressed-20260501-135038.log --category code_small > <TMP_DIR>/compact-exec-check-suppressed.json || true",
+    ".venv/bin/python -m app.cli compact-exec-report --log <TMP_DIR>/codex-runs/factoryos-ab-diff-suppressed-20260501-135038.log --category code_small > <TMP_DIR>/compact-exec-report.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

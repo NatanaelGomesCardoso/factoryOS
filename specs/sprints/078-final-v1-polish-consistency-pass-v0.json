@@ -1,0 +1,57 @@
+{
+  "id": "078",
+  "title": "Final V1 Polish & Consistency Pass V0",
+  "status": "planned",
+  "goal": "Executar uma lapidação técnica final da FactoryOS V1 sem criar feature grande.",
+  "features": [
+    {
+      "id": "feat-final-polish-001",
+      "title": "Adicionar polish check V1 em dry-run",
+      "status": "planned",
+      "files": [
+        "app/v1_polish.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-polish-check existe",
+        "factoryos-v1-polish-check aceita --dry-run",
+        "o report retorna polish_decision",
+        "readiness, audit, security e reliability continuam executáveis",
+        "painel abre",
+        "executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-final-polish-002",
+      "title": "Registrar documentação e proof da lapidação final",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-final-polish.md",
+        "specs/sprints/078-final-v1-polish-consistency-pass-v0.json",
+        "reports/final-v1-polish-consistency-pass-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "documentação descreve o comando e escopo",
+        "proof registra decisão e safety flags",
+        "outputs permanecem compactos"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m app.cli factoryos-v1-polish-check --dry-run",
+    "python -m json.tool specs/sprints/078-final-v1-polish-consistency-pass-v0.json",
+    "python -m py_compile app/v1_polish.py app/cli.py",
+    "git diff --check"
+  ],
+  "risks": [
+    "checks V1 geram novos reports em dry-run"
+  ],
+  "out_of_scope": [
+    "feature grande",
+    "redesign de UI",
+    "limpeza destrutiva",
+    "push",
+    "deploy",
+    "API paga"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "071",
+  "name": "Obsidian Project Memory Sync V0",
+  "status": "planned",
+  "objective": "Sincronizar memória curta do projeto para Obsidian em modo seguro.",
+  "command": "obsidian-project-sync",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/obsidian-project-memory-sync-v0-proof.txt",
+    "generated": "reports/obsidian-project-syncs/"
+  }
+}

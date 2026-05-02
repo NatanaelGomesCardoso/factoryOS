@@ -1,0 +1,39 @@
+{
+  "sprint": 47,
+  "title": "No-Diff Prompt Discipline V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Criar contrato reutilizável no-diff-prompt-contract",
+    "Injetar o contrato no run-handoff",
+    "Detectar contrato no quiet runner",
+    "Expor checagem via CLI"
+  ],
+  "reuse_first": [
+    "codex_handoff",
+    "codex_quiet_runner",
+    "compact_execution_harness",
+    "cli"
+  ],
+  "out_of_scope": [
+    "apagar reports antigos",
+    "usar API paga",
+    "mudar harness global",
+    "mexer em secrets",
+    "fazer push"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s047.txt",
+    ".venv/bin/python -m json.tool specs/sprints/047-no-diff-prompt-discipline-v0.json > <TMP_DIR>/s047-json-check.txt",
+    ".venv/bin/python -m app.cli no-diff-prompt-contract > <TMP_DIR>/no-diff-contract.txt",
+    ".venv/bin/python -m app.cli no-diff-prompt-check --prompt-file <PATH> > <TMP_DIR>/no-diff-check.txt",
+    "run-handoff de uma run segura > <TMP_DIR>/s047-handoff.json",
+    "Validar no_diff_required=true no handoff",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/no-diff-prompt-discipline-v0-proof.txt",
+  "proof_path": "reports/no-diff-prompt-discipline-v0-proof.txt"
+}

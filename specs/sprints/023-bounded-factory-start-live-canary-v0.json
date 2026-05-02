@@ -1,0 +1,98 @@
+{
+  "id": "sprint-023-bounded-factory-start-live-canary-v0",
+  "title": "Bounded Factory Start Live Canary V0",
+  "status": "planned",
+  "goal": "Executar um canário live bounded do factory-start com max_steps=1, nova run/worktree e alteração limitada a um único arquivo permitido.",
+  "features": [
+    {
+      "id": "feat-factory-start-023-001",
+      "title": "Adicionar live canary bounded ao factory-start",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/cli.py",
+        "app/execution_evaluator.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-start --live --run-id <RUN_ID> --max-steps 1 sem --canary bloqueia",
+        "factory-start --live --canary --run-id <RUN_ID> --max-steps 1 exige FACTORYOS_ENABLE_LIVE_CODEX=1",
+        "o live canary executa exatamente uma vez quando o estado estiver seguro",
+        "changed_files fica restrito ao arquivo permitido",
+        "master permanece intacto"
+      ]
+    },
+    {
+      "id": "feat-factory-start-023-002",
+      "title": "Registrar report, proof e painel do live canary",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "reports/bounded-factory-start-live-canary-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "report JSON é salvo em reports/factory-start-live-canary/",
+        "proof registra heads, changed_files e flags de segurança",
+        "o painel mostra o último Factory Start Live Canary e continua read-only"
+      ]
+    },
+    {
+      "id": "feat-factory-start-023-003",
+      "title": "Registrar discovery, PRD, SPEC e sprint JSON",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-bounded-factory-start-live-canary-v0.md",
+        "specs/prd/bounded-factory-start-live-canary-v0-prd.md",
+        "specs/technical-spec/bounded-factory-start-live-canary-v0.md",
+        "specs/sprints/023-bounded-factory-start-live-canary-v0.json"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra reuso obrigatório",
+        "PRD e SPEC documentam o canário bounded",
+        "o sprint JSON registra riscos, validações e fora de escopo"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/023-bounded-factory-start-live-canary-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-prepare <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli factory-start --live --run-id <CANARY_RUN_ID> --max-steps 1",
+    "FACTORYOS_ENABLE_LIVE_CODEX=1 .venv/bin/python -m app.cli factory-start --live --canary --run-id <CANARY_RUN_ID> --max-steps 1",
+    ".venv/bin/python -m app.cli execution-evaluate --run-id <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli factory-start --live --canary --run-id ../oops --max-steps 1",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "uma mudança fora do arquivo permitido invalida a prova",
+    "qualquer mudança em master durante o live é regressão crítica",
+    "estado inconsistente de worktree deve bloquear sem forçar execução"
+  ],
+  "out_of_scope": [
+    "loop de 6h",
+    "produção",
+    "daemon",
+    "scheduler",
+    "execução paralela",
+    "App Server",
+    "MCP",
+    "GitHub",
+    "Linear",
+    "deploy",
+    "push",
+    "merge",
+    "rebase",
+    "fetch",
+    "pull",
+    "API paga",
+    "secrets"
+  ]
+}

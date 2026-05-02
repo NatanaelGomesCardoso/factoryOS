@@ -1,0 +1,60 @@
+{
+  "sprint": "086.D",
+  "title": "Complete Documentation & Local Help Center V0",
+  "objective": "Criar documentação completa e publicável do FactoryOS com Help Center local read-only.",
+  "status": "implemented",
+  "scope": {
+    "readme": "README.md compacto para GitHub",
+    "docs": [
+      "docs/README.md",
+      "docs/GETTING_STARTED.md",
+      "docs/USER_GUIDE.md",
+      "docs/ARCHITECTURE.md",
+      "docs/COMMANDS.md",
+      "docs/WORKFLOWS.md",
+      "docs/SECURITY.md",
+      "docs/REVERSA.md",
+      "docs/LOCAL_PANEL.md",
+      "docs/EXTENDED_RUNS.md",
+      "docs/CLEANUP_AND_RELEASE.md",
+      "docs/CONTRIBUTING.md",
+      "docs/FAQ.md",
+      "docs/diagrams/README.md"
+    ],
+    "panel": [
+      "GET /help",
+      "GET /help/{doc_slug}"
+    ],
+    "cli": [
+      "help-docs-list",
+      "help-docs-check --dry-run"
+    ]
+  },
+  "security_contract": {
+    "local_first": true,
+    "panel_read_only": true,
+    "path_traversal_blocked": true,
+    "html_escaped": true,
+    "external_js": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "validation_plan": [
+    "py_compile",
+    "compileall",
+    "json.tool",
+    "help-docs-list",
+    "help-docs-check --dry-run",
+    "TestClient GET /",
+    "TestClient GET /help",
+    "TestClient GET /help/getting-started",
+    "TestClient traversal /help/..%2FREADME.md = 404",
+    "git diff --check",
+    "harness global-doctor --strict",
+    "harness doctor --source-root <HARNESS_ROOT> --strict",
+    "harness security-doctor --source-root <FACTORYOS_ROOT> --strict"
+  ],
+  "report_path": "reports/documentation/complete-documentation-local-help-center-v0.json"
+}

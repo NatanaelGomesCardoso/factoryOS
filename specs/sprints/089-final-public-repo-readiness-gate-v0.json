@@ -1,0 +1,60 @@
+{
+  "sprint": "089",
+  "title": "Final Public Repo Readiness Gate V0",
+  "objective": "Criar gate final local para decidir se o export limpo pode ser revisado para GitHub sem push automatico.",
+  "status": "implemented",
+  "commands": [
+    "public-repo-readiness-gate --dry-run"
+  ],
+  "created_files": [
+    "app/public_repo_readiness.py",
+    "docs/final-public-repo-readiness-gate.md",
+    "specs/sprints/089-final-public-repo-readiness-gate-v0.json",
+    "reports/final-public-repo-readiness-gate-v0-proof.txt"
+  ],
+  "changed_files": [
+    "app/cli.py"
+  ],
+  "checks": [
+    "README exists",
+    "docs exists",
+    "help center documented",
+    "commands documented",
+    "reports excluded from public export",
+    "workspaces excluded from public export",
+    ".env and secrets excluded",
+    "local path leaks checked",
+    "license status declared",
+    "install/run docs exist",
+    "panel docs exist",
+    "security docs exist",
+    "Reversa docs exist",
+    "cleanup/release docs exist",
+    "GitHub push blocked by default"
+  ],
+  "result_contract": {
+    "readiness_decision": [
+      "ready_for_human_review",
+      "needs_review",
+      "failed"
+    ],
+    "safe_to_push": false,
+    "safe_to_publish": false,
+    "human_review_required": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "validation_plan": [
+    "py_compile",
+    "compileall app",
+    "json.tool specs/sprints/089-final-public-repo-readiness-gate-v0.json",
+    "public-repo-readiness-gate --dry-run",
+    "help-docs-check --dry-run",
+    "TestClient GET / = 200",
+    "TestClient GET /help = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/final-public-repo-readiness-gate-v0-proof.txt"
+}

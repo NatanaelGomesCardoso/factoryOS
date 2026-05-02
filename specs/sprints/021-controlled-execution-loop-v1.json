@@ -1,0 +1,98 @@
+{
+  "id": "sprint-021-controlled-execution-loop-v1",
+  "title": "Controlled Execution Loop V1",
+  "status": "planned",
+  "goal": "Evoluir o loop controlado para usar o estado higienizado, selecionar automaticamente uma única run elegível quando seguro e produzir reports V1 mais claros, mantendo dry-run por padrão e live bloqueado.",
+  "features": [
+    {
+      "id": "feat-controlled-loop-v1-001",
+      "title": "Selecionar automaticamente uma única run elegível",
+      "status": "planned",
+      "files": [
+        "app/controlled_loop.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-loop --max-steps 1 --dry-run bloqueia quando houver zero runs elegíveis",
+        "factory-loop --max-steps 1 --dry-run auto seleciona quando houver exatamente uma run elegível",
+        "factory-loop retorna needs_review quando houver mais de uma run elegível",
+        "factory-loop --run-id mantém o comportamento explícito e marca auto_selected=false",
+        "factory-loop --live continua bloqueado"
+      ]
+    },
+    {
+      "id": "feat-controlled-loop-v1-002",
+      "title": "Registrar hygiene summary e report V1",
+      "status": "planned",
+      "files": [
+        "app/controlled_loop.py",
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "reports/controlled-execution-loop-v1-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o report inclui loop_version=v1",
+        "o report inclui auto_selected e eligible_runs_count",
+        "o report inclui hygiene summary",
+        "o painel mostra os campos novos e continua read-only"
+      ]
+    },
+    {
+      "id": "feat-controlled-loop-v1-003",
+      "title": "Registrar discovery, PRD, SPEC e sprint JSON",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-controlled-execution-loop-v1.md",
+        "specs/prd/controlled-execution-loop-v1-prd.md",
+        "specs/technical-spec/controlled-execution-loop-v1.md",
+        "specs/sprints/021-controlled-execution-loop-v1.json"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra reuso obrigatório",
+        "PRD e SPEC documentam a elegibilidade e o report V1",
+        "o sprint JSON registra riscos e fora de escopo"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/021-controlled-execution-loop-v1.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli factory-state-audit",
+    ".venv/bin/python -m app.cli factory-state-plan",
+    ".venv/bin/python -m app.cli run-workspace-readiness <RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <RUN_ID>",
+    ".venv/bin/python -m app.cli factory-loop --run-id <RUN_ID> --max-steps 1 --dry-run",
+    ".venv/bin/python -m app.cli factory-loop --max-steps 1 --dry-run",
+    ".venv/bin/python -m app.cli factory-loop --run-id <RUN_ID> --live",
+    ".venv/bin/python -m app.cli factory-loop --run-id ../oops --dry-run",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "selecionar automaticamente uma run não elegível geraria falsa segurança",
+    "mais de uma run elegível precisa continuar exigindo revisão humana",
+    "o report V1 não pode sugerir live ou passed sem evidência real"
+  ],
+  "out_of_scope": [
+    "factory-start",
+    "daemon",
+    "scheduler",
+    "live Codex",
+    "execução paralela",
+    "App Server",
+    "MCP",
+    "GitHub",
+    "Linear",
+    "deploy",
+    "merge",
+    "rebase",
+    "fetch",
+    "pull",
+    "API paga"
+  ]
+}

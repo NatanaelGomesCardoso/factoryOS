@@ -1,0 +1,20 @@
+{
+  "id": "064",
+  "name": "First Real Project Workspace Scaffold V0",
+  "status": "planned",
+  "objective": "Preparar um workspace local controlado para o primeiro projeto real sem deploy ou push.",
+  "command": "project-workspace-scaffold",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/first-real-project-workspace-scaffold-v0-proof.txt",
+    "generated": "reports/project-workspaces/"
+  }
+}
+

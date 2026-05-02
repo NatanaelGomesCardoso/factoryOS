@@ -1,0 +1,43 @@
+{
+  "sprint": 51,
+  "title": "Factory Start Uses Capsule For Cheap Tasks V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Integrar a policy ao factory-start e ao run-handoff",
+    "Expor recommendation e savings esperado",
+    "Manter plan-only cost-aware sem live",
+    "Validar canário dry-run barato",
+    "Preservar bloqueio de live nesta sprint"
+  ],
+  "reuse_first": [
+    "capsule_execution_policy",
+    "codex_handoff",
+    "factory_start",
+    "codex_context_router",
+    "codex_profile"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "fazer deploy",
+    "push/pull/fetch/rebase",
+    "usar API paga",
+    "mexer em secrets"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s051.txt",
+    ".venv/bin/python -m json.tool specs/sprints/051-factory-start-capsule-mode-v0.json > <TMP_DIR>/s051-json-check.txt",
+    "criar task/run barata de validação",
+    "run-handoff > <TMP_DIR>",
+    "factory-start --plan-only --cost-aware > <TMP_DIR>",
+    "validar capsule_recommended=true",
+    "validar executed_live=false",
+    "validar allowed_to_execute_live=false",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/factory-start-capsule-mode-v0-proof.txt",
+  "proof_path": "reports/factory-start-capsule-mode-v0-proof.txt"
+}

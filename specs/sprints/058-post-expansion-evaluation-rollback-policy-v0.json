@@ -1,0 +1,24 @@
+{
+  "id": "058",
+  "name": "Post Expansion Evaluation Rollback Policy V0",
+  "status": "planned",
+  "objective": "Avaliar formalmente o canário expandido e gerar política de rollback/recovery em dry-run.",
+  "commands": [
+    "post-expansion-evaluate --report <REPORT_PATH>",
+    "post-expansion-rollback-plan --report <REPORT_PATH> --dry-run"
+  ],
+  "safety": {
+    "safe_to_apply": false,
+    "human_review_required": true,
+    "no_auto_rollback": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/post-expansion-evaluation-rollback-policy-v0-proof.txt",
+    "evaluation": "",
+    "rollback_dry_run": ""
+  }
+}

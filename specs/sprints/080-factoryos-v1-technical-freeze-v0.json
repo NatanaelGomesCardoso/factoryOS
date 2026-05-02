@@ -1,0 +1,58 @@
+{
+  "id": "080",
+  "title": "FactoryOS V1 Technical Freeze V0",
+  "status": "planned",
+  "goal": "Registrar o congelamento técnico V1 sem finalizar visualmente o produto.",
+  "features": [
+    {
+      "id": "feat-technical-freeze-001",
+      "title": "Adicionar technical freeze V1 em dry-run",
+      "status": "planned",
+      "files": [
+        "app/v1_technical_freeze.py",
+        "app/cli.py",
+        "app/report_index.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-technical-freeze existe",
+        "factoryos-v1-technical-freeze aceita --dry-run",
+        "o report retorna final_v1_status",
+        "human_review_required=true",
+        "visual_final_ready=false",
+        "executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-technical-freeze-002",
+      "title": "Registrar documentação e proof do technical freeze",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-technical-freeze.md",
+        "specs/sprints/080-factoryos-v1-technical-freeze-v0.json",
+        "reports/factoryos-v1-technical-freeze-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "documentação lista próximos passos pós-freeze",
+        "proof registra status e safety flags",
+        "não há declaração de V1 visualmente final"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m app.cli factoryos-v1-technical-freeze --dry-run",
+    "python -m json.tool specs/sprints/080-factoryos-v1-technical-freeze-v0.json",
+    "python -m py_compile app/v1_technical_freeze.py app/cli.py app/report_index.py",
+    "git diff --check"
+  ],
+  "risks": [
+    "checks consolidados geram novos reports em dry-run"
+  ],
+  "out_of_scope": [
+    "V1 visual final",
+    "limpeza profunda",
+    "redesign de UI",
+    "push",
+    "deploy",
+    "API paga"
+  ]
+}

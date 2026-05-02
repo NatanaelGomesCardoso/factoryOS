@@ -1,0 +1,69 @@
+{
+  "id": "sprint-006-task-runner-v0",
+  "title": "Task Runner V0 local",
+  "status": "planned",
+  "goal": "Controlar o ciclo de vida local de tasks do FactoryOS com filesystem, JSON e CLI.",
+  "features": [
+    {
+      "id": "feat-task-runner-001",
+      "title": "Criar módulo local de task runner",
+      "status": "planned",
+      "files": [
+        "app/task_runner.py"
+      ],
+      "acceptanceCriteria": [
+        "gera id seguro e legível",
+        "cria tasks em tasks/pending/",
+        "valida JSON antes de mover",
+        "bloqueia path traversal",
+        "não sobrescreve task existente"
+      ]
+    },
+    {
+      "id": "feat-task-runner-002",
+      "title": "Adicionar comandos CLI para lifecycle",
+      "status": "planned",
+      "files": [
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "task-create cria task pendente",
+        "task-list lista por status",
+        "task-start move pending para running",
+        "task-finish move running para done",
+        "task-fail move pending ou running para failed"
+      ]
+    },
+    {
+      "id": "feat-task-runner-003",
+      "title": "Manter contagem do painel alinhada ao filesystem",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py"
+      ],
+      "acceptanceCriteria": [
+        "contagens representam o total real por pasta",
+        "listas do painel continuam limitadas",
+        "painel permanece read-only"
+      ]
+    }
+  ],
+  "validation": [
+    "source .venv/bin/activate se existir",
+    "python -m py_compile app/*.py",
+    "python -m compileall app",
+    "python -m json.tool specs/sprints/006-task-runner-v0.json",
+    "python -m app.cli task-create \"Teste task runner v0\" --description \"Task de validação\" --risk low --executor manual",
+    "python -m app.cli task-list",
+    "python -m app.cli task-start <id criado>",
+    "python -m app.cli task-finish <id criado>",
+    "python -m app.cli task-fail <outro id criado>",
+    "erro para id inexistente",
+    "bloqueio de path traversal",
+    "teste de abuso documentado em PRD/SPEC",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "confirmar contagens do painel",
+    "harness security-doctor --source-root <FACTORYOS_ROOT> --strict",
+    "git diff --check"
+  ]
+}

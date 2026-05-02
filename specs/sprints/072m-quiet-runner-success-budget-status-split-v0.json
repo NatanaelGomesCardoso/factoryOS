@@ -1,0 +1,56 @@
+{
+  "id": "072.M",
+  "name": "Quiet Runner Success/Budget Status Split V0",
+  "status": "implemented",
+  "objective": "Separar sucesso de execucao do status de budget/log capturado no codex-quiet-run.",
+  "scope": [
+    "app/codex_quiet_runner.py",
+    "app/cli.py",
+    "docs/quiet-runner-status-contract.md",
+    "tests/test_quiet_runner_status_contract.py"
+  ],
+  "contract": {
+    "execution_status": [
+      "succeeded",
+      "failed",
+      "timeout"
+    ],
+    "budget_status": [
+      "ok",
+      "warn",
+      "blocked"
+    ],
+    "terminal_status": [
+      "ok",
+      "warn",
+      "blocked"
+    ],
+    "captured_log_status": [
+      "ok",
+      "warn",
+      "blocked"
+    ],
+    "overall_status": [
+      "succeeded",
+      "succeeded_with_budget_warnings",
+      "failed",
+      "timeout"
+    ]
+  },
+  "success_criteria": {
+    "exit_code_0_budget_blocked_does_not_mask_success": true,
+    "timeout_still_failed": true,
+    "invalid_json_still_error": true,
+    "result_check_exit_codes": true,
+    "executed_live": false
+  },
+  "reports": {
+    "proof": "reports/quiet-runner-success-budget-status-split-v0-proof.txt"
+  },
+  "safety": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "id": "sprint-008-evaluator-runner-integration-v0",
+  "title": "Evaluator Runner Integration V0",
+  "status": "planned",
+  "goal": "Integrar task runner e evaluator de forma local para gerar report por task e exibir o ultimo resultado no painel.",
+  "features": [
+    {
+      "id": "feat-evaluator-runner-001",
+      "title": "Criar comando task-evaluate <id>",
+      "status": "planned",
+      "files": [
+        "app/task_runner.py",
+        "app/cli.py",
+        "app/evaluator.py"
+      ],
+      "acceptanceCriteria": [
+        "task-evaluate aceita um id valido",
+        "task-evaluate localiza task em pending, running, done ou failed",
+        "task-evaluate chama o evaluator interno existente",
+        "task-evaluate nao executa comandos externos",
+        "task-evaluate bloqueia path traversal e id invalido"
+      ]
+    },
+    {
+      "id": "feat-evaluator-runner-002",
+      "title": "Gerar report local de avaliacao por task",
+      "status": "planned",
+      "files": [
+        "app/task_runner.py",
+        "app/evaluator.py",
+        "reports/task-evaluations/"
+      ],
+      "acceptanceCriteria": [
+        "cada avaliacao gera JSON local por task",
+        "o report inclui decision, risk, reason, next_action e failed_checks",
+        "o report fica em reports/task-evaluations/",
+        "o caminho salvo e relativo ao repo",
+        "o report nao expoe caminho absoluto"
+      ]
+    },
+    {
+      "id": "feat-evaluator-runner-003",
+      "title": "Exibir o ultimo resultado da task no painel",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html"
+      ],
+      "acceptanceCriteria": [
+        "o painel carrega o ultimo report de task",
+        "o painel exibe task_id, decision, risk, reason e next_action",
+        "o painel continua read-only",
+        "o painel nao permite mutacao nem escrita"
+      ]
+    },
+    {
+      "id": "feat-evaluator-runner-004",
+      "title": "Validar abuso e estados",
+      "status": "planned",
+      "files": [
+        "app/task_runner.py",
+        "app/cli.py",
+        "app/panel_data.py"
+      ],
+      "acceptanceCriteria": [
+        "id inexistente falha com erro explicito",
+        "path traversal falha",
+        "task em pending funciona",
+        "task em running funciona",
+        "task em done funciona",
+        "task em failed funciona"
+      ]
+    }
+  ],
+  "validation": [
+    "source .venv/bin/activate se existir",
+    "python -m app.cli task-start 20260429-171301-sprint-008-evaluator-runner-integration-v0-2cf093",
+    "python -m app.cli task-show 20260429-171301-sprint-008-evaluator-runner-integration-v0-2cf093",
+    "confirmar status running",
+    "python -m json.tool specs/sprints/008-evaluator-runner-integration-v0.json",
+    "python -m app.cli task-list",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ]
+}

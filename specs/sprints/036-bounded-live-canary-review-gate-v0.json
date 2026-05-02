@@ -1,0 +1,38 @@
+{
+  "sprint": 36,
+  "title": "Bounded Live Canary Review Gate V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Revisar formalmente o bounded live canary aprovado da Sprint 035",
+    "Transformar o resultado em um review gate estruturado",
+    "Validar evidências antes de qualquer expansão live",
+    "Não executar live novo"
+  ],
+  "reuse_first": [
+    "factory_start",
+    "execution_evaluator",
+    "codex_cost_audit",
+    "report_index"
+  ],
+  "out_of_scope": [
+    "executar live novo",
+    "expandir para 30m/6 steps",
+    "deploy",
+    "push",
+    "mudar harness"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/036-bounded-live-canary-review-gate-v0.json",
+    ".venv/bin/python -m app.cli bounded-live-canary-review --run-id 20260501-122233-20260501-122221-sprint-035-canary-valida-e2f5d0",
+    ".venv/bin/python -m app.cli bounded-live-canary-review --report reports/bounded-long-run-live-canary/20260501-122408-20260501-122233-20260501-122221-sprint-035-canary-valida-e2f5d0.json",
+    ".venv/bin/python -m app.cli bounded-live-canary-review --run-id ../oops",
+    "TestClient GET / = 200",
+    "git diff --check",
+    "harness global-doctor --strict",
+    "harness doctor --source-root <HARNESS_ROOT> --strict"
+  ]
+}

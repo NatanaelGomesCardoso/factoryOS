@@ -1,0 +1,39 @@
+{
+  "sprint": 46,
+  "title": "Captured Log Hard Budget & Truncation V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "codex",
+  "objectives": [
+    "Separar budgets visíveis, de aviso, duros e de truncation para o log capturado",
+    "Criar preview seguro truncado com sha256 do log completo",
+    "Manter compatibilidade com reports antigos",
+    "Gerar prova curta em reports"
+  ],
+  "reuse_first": [
+    "codex_quiet_runner",
+    "output_budget",
+    "token_usage",
+    "compact_execution_harness"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "usar API paga",
+    "mudar harness global",
+    "apagar reports antigos",
+    "expor segredos"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s046.txt",
+    ".venv/bin/python -m json.tool specs/sprints/046-captured-log-hard-budget-truncation-v0.json > <TMP_DIR>/s046-json-check.txt",
+    "Criar sample log pequeno",
+    "Criar sample log grande com muitas linhas diff-like",
+    "Validar preview truncado e captured_log_status warn ou blocked conforme threshold",
+    "FACTORYOS_ENABLE_QUIET_CODEX=1 .venv/bin/python -m app.cli codex-quiet-run --prompt-file <TMP_DIR>/truncation-ok.prompt --cwd <FACTORYOS_ROOT> --model gpt-5.4-mini --reasoning low --sandbox read-only --approval never --label s046-truncation-ok --execute --no-push --no-deploy --no-paid-api --no-secrets > <TMP_DIR>/s046-quiet-run.json",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/captured-log-hard-budget-truncation-v0-proof.txt",
+  "proof_path": "reports/captured-log-hard-budget-truncation-v0-proof.txt"
+}

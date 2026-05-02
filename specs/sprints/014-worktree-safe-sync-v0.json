@@ -1,0 +1,97 @@
+{
+  "id": "sprint-014-worktree-safe-sync-v0",
+  "title": "Worktree Safe Sync V0",
+  "status": "planned",
+  "goal": "Criar um plano e uma aplicação segura de fast-forward para worktree por run, bloqueando sync quando houver sujeira, branch errado, divergência real ou commits próprios no branch da run.",
+  "features": [
+    {
+      "id": "feat-worktree-safe-sync-001",
+      "title": "Planejar sync local seguro",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-workspace-sync-plan valida run_id e run existente",
+        "run-workspace-sync-plan usa Git como fonte de verdade",
+        "run-workspace-sync-plan retorna fast_forward_available, already_current, blocked_dirty, blocked_wrong_branch, blocked_not_worktree, blocked_diverged ou blocked_missing",
+        "run-workspace-sync-plan bloqueia quando o workspace nao for um git worktree real",
+        "run-workspace-sync-plan bloqueia quando a branch estiver incorreta",
+        "run-workspace-sync-plan bloqueia quando o workspace estiver sujo",
+        "run-workspace-sync-plan bloqueia quando workspace_head nao for ancestral de main_head",
+        "run-workspace-sync-plan nao altera o workspace"
+      ]
+    },
+    {
+      "id": "feat-worktree-safe-sync-002",
+      "title": "Aplicar fast-forward seguro",
+      "status": "planned",
+      "files": [
+        "app/run_workspace.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-workspace-sync-apply roda o mesmo plano antes de agir",
+        "run-workspace-sync-apply aplica somente quando safe_to_apply=true e status=fast_forward_available",
+        "run-workspace-sync-apply usa fast-forward local seguro sem rebase ou merge com commit",
+        "run-workspace-sync-apply roda readiness depois do sync",
+        "run-workspace-sync-apply nao altera o repo principal"
+      ]
+    },
+    {
+      "id": "feat-worktree-safe-sync-003",
+      "title": "Propagar estado para painel e prova",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "reports/worktree-safe-sync-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o painel mostra sync_plan_status ou pelo menos readiness atualizado",
+        "run-handoff e run-execute --dry-run continuam carregando readiness_status",
+        "o proof registra comandos, branch, main_head, workspace_head e riscos",
+        "o proof confirma que nao houve live Codex, fetch, pull, merge com commit ou rebase"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/014-worktree-safe-sync-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-readiness 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-workspace-sync-apply 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-workspace-readiness 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m app.cli run-handoff 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886",
+    ".venv/bin/python -m json.tool reports/run-handoffs/20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886.json",
+    ".venv/bin/python -m app.cli run-execute 20260430-133733-20260430-133723-sprint-012-real-isolated-c8d886 --dry-run",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan ../oops",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ],
+  "risks": [
+    "workspace sujo ou branch errada precisam bloquear o plano",
+    "divergencia real entre workspace_head e main_head precisa cair em blocked_diverged",
+    "ff-only deve falhar de forma segura se o Git não aceitar o avanço",
+    "nenhuma correção automática de conflito pode acontecer"
+  ],
+  "out_of_scope": [
+    "execucao live do Codex",
+    "daemon",
+    "scheduler",
+    "App Server",
+    "MCP",
+    "integracao GitHub/Linear",
+    "execucao paralela",
+    "merge automatico com commit",
+    "rebase automatico",
+    "fetch/pull automaticos",
+    "deploy"
+  ]
+}

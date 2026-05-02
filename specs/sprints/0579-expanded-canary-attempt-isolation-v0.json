@@ -1,0 +1,26 @@
+{
+  "id": "0579",
+  "name": "Expanded Canary Attempt Isolation V0",
+  "status": "planned",
+  "objective": "Isolar cada tentativa do expanded-bounded-live-canary com attempt_id próprio e validar diff por step apenas dentro da whitelist da tentativa atual.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/expanded-canary-attempt-isolation-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "sprint": "080.M",
+  "title": "Deep Project Hygiene & External Artifact Cleanup Audit V0",
+  "status": "implemented",
+  "objective": "Auditar higiene profunda do FactoryOS e artefatos externos relacionados sem apagar arquivos.",
+  "commands": [
+    "factoryos-deep-hygiene-audit --dry-run",
+    "factoryos-deep-hygiene-audit --dry-run --include-external"
+  ],
+  "outputs": [
+    "reports/deep-hygiene-audits/<timestamp>.json",
+    "reports/deep-project-hygiene-external-artifact-cleanup-audit-v0-proof.txt"
+  ],
+  "safety": {
+    "dry_run_only": true,
+    "safe_to_apply": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "083.R",
+  "name": "Reversa Legacy Project Intake Integration V0",
+  "status": "implemented",
+  "objective": "Adicionar suporte controlado ao Reversa no FactoryOS para retomar projetos antigos, analisar projetos existentes e usar um projeto como base para novos sistemas.",
+  "commands": [
+    "reversa-global-check",
+    "reversa-project-plan",
+    "reversa-project-install",
+    "reversa-project-status",
+    "reversa-project-sdd-intake"
+  ],
+  "scope": {
+    "live_install_enabled": false,
+    "dry_run_required": true,
+    "target_root": "<CODE_ROOT>",
+    "protected_targets": [
+      "<HARNESS_ROOT>",
+      "<FACTORYOS_ROOT>"
+    ]
+  },
+  "reports": {
+    "plan": "reports/reversa-project-plans/",
+    "install": "reports/reversa-installs/",
+    "status": "reports/reversa-project-status/",
+    "sdd_intake": "reports/reversa-sdd-intakes/",
+    "proof": "reports/reversa-legacy-project-intake-integration-v0-proof.txt"
+  },
+  "safety": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true,
+    "no_reversa_install_real_project": true,
+    "no_external_dependencies_installed": true
+  }
+}

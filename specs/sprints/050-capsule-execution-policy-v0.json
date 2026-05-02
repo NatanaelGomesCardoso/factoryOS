@@ -1,0 +1,40 @@
+{
+  "sprint": 50,
+  "title": "Capsule Execution Policy V0",
+  "status": "done",
+  "risk": "medium",
+  "executor": "codex",
+  "objectives": [
+    "Criar policy formal para escolher executor econômico",
+    "Padronizar capsule como caminho padrão para docs_only e code_small",
+    "Manter repo_quiet como fallback quando necessário",
+    "Bloquear live diretamente",
+    "Registrar savings esperado e política de timeout"
+  ],
+  "reuse_first": [
+    "capsule_execution_policy",
+    "codex_context_capsule",
+    "codex_capsule_execution",
+    "codex_context_router",
+    "codex_profile"
+  ],
+  "out_of_scope": [
+    "executar live",
+    "alterar ~/.codex/config.toml",
+    "mexer no harness",
+    "usar API paga",
+    "mexer em secrets"
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app > <TMP_DIR>/compileall-s050.txt",
+    ".venv/bin/python -m json.tool specs/sprints/050-capsule-execution-policy-v0.json > <TMP_DIR>/s050-json-check.txt",
+    "capsule-execution-policy --category docs_only",
+    "capsule-execution-policy --category code_small",
+    "capsule-execution-policy --category security_review",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/capsule-execution-policy-v0-proof.txt",
+  "proof_path": "reports/capsule-execution-policy-v0-proof.txt"
+}

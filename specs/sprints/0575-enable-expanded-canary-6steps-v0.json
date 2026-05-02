@@ -1,0 +1,31 @@
+{
+  "id": "0575",
+  "name": "Enable Approved Expanded Canary 6 Steps V0",
+  "status": "approved_for_implementation",
+  "objective": "Permitir max_steps=6 apenas no comando expanded-bounded-live-canary quando a run tiver review gate aprovado e todas as safety flags obrigatórias.",
+  "command": "expanded-bounded-live-canary",
+  "limits": {
+    "max_steps": 6,
+    "max_minutes": 30
+  },
+  "gates": {
+    "approved_review_gate_required": true,
+    "review_gate_source": "reports/expanded-long-run-reviews/",
+    "run_id_must_match_gate": true
+  },
+  "safety": {
+    "bounded": true,
+    "canary": true,
+    "cost_aware": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/enable-expanded-canary-6steps-v0-proof.txt",
+    "live": "",
+    "evaluation": "",
+    "rollback": ""
+  }
+}

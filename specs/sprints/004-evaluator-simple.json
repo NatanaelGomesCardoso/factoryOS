@@ -1,0 +1,31 @@
+{
+  "id": "sprint-004-evaluator-simple",
+  "title": "Evaluator simples local",
+  "status": "planned",
+  "goal": "Classificar resultados de validações locais sem usar Codex.",
+  "features": [
+    {
+      "id": "feat-evaluator-001",
+      "title": "Criar módulo evaluator",
+      "status": "planned",
+      "files": ["app/evaluator.py"],
+      "acceptanceCriteria": [
+        "retorna passed quando tudo está ok",
+        "retorna stopped_security quando security_ok=false",
+        "retorna failed_retryable quando validação comum falha",
+        "retorna needs_chatgpt_review quando high_risk=true"
+      ]
+    },
+    {
+      "id": "feat-evaluator-002",
+      "title": "Adicionar comando CLI evaluate",
+      "status": "planned",
+      "files": ["app/cli.py"],
+      "acceptanceCriteria": [
+        "comando evaluate imprime JSON",
+        "comando evaluate aceita --out",
+        "JSON gerado é válido"
+      ]
+    }
+  ]
+}

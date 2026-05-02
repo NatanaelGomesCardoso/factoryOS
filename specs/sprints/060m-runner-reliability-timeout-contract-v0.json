@@ -1,0 +1,35 @@
+{
+  "id": "060m",
+  "name": "Runner Reliability & Timeout Result Contract V0",
+  "status": "implemented",
+  "objective": "Garantir que codex-quiet-run sempre escreva JSON valido, inclusive em timeout, e expor um comando de validacao de report.",
+  "commands": [
+    "codex-quiet-run",
+    "codex-run-result-check"
+  ],
+  "requirements": {
+    "timeout_seconds_option": true,
+    "timeout_default_seconds": 600,
+    "timeout_exit_code": 124,
+    "timeout_overall_status": "timeout",
+    "timeout_error_type": "timeout",
+    "timeout_json_contract": true,
+    "result_check_returns_zero_for_valid_json": true,
+    "result_check_returns_two_for_missing_empty_invalid": true,
+    "pytest_required": false
+  },
+  "validation": {
+    "py_compile": true,
+    "compileall": true,
+    "json_tool": true,
+    "script_test": true,
+    "help_timeout_runner": true,
+    "help_result_check": true,
+    "web_root_200": false,
+    "web_root_200_reason": "fastapi nao estava disponivel no python3 do sistema",
+    "git_diff_check": true
+  },
+  "reports": {
+    "proof": "reports/runner-reliability-timeout-contract-v0-proof.txt"
+  }
+}

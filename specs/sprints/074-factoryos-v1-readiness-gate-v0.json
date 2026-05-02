@@ -1,0 +1,61 @@
+{
+  "id": "074",
+  "title": "FactoryOS V1 Readiness Gate V0",
+  "status": "planned",
+  "goal": "Criar um gate de prontidão V1 para dizer se o FactoryOS pode avançar para auditoria, correção e lapidação nas rodadas GPT-5.5.",
+  "features": [
+    {
+      "id": "feat-factoryos-v1-readiness-gate-001",
+      "title": "Consolidar checks de prontidão",
+      "status": "planned",
+      "files": [
+        "app/v1_readiness_gate.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-readiness-gate existe",
+        "factoryos-v1-readiness-gate aceita --dry-run",
+        "o gate verifica comandos principais",
+        "o gate verifica reports principais",
+        "o gate verifica GET / = 200",
+        "o gate verifica git diff --check",
+        "o gate retorna readiness_decision explícito"
+      ]
+    },
+    {
+      "id": "feat-factoryos-v1-readiness-gate-002",
+      "title": "Registrar artefatos de suporte",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-readiness-gate.md",
+        "specs/discovery/reuse-first-first-factoryos-v1-readiness-gate-v0.md",
+        "specs/prd/factoryos-v1-readiness-gate-v0-prd.md",
+        "specs/technical-spec/factoryos-v1-readiness-gate-v0.md",
+        "specs/sprints/074-factoryos-v1-readiness-gate-v0.json",
+        "reports/factoryos-v1-readiness-gate-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "os artefatos descrevem o gate de prontidão",
+        "os checks mínimos estão enumerados",
+        "push, deploy, API paga e secrets aparecem como nunca automático"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m py_compile app/*.py",
+    "python -m json.tool specs/sprints/074-factoryos-v1-readiness-gate-v0.json",
+    "factoryos-v1-readiness-gate --dry-run"
+  ],
+  "risks": [
+    "o gate não pode virar um mecanismo de correção automática",
+    "o painel precisa responder 200 no caminho raiz",
+    "o verdict deve continuar observável e sem exceções Python"
+  ],
+  "out_of_scope": [
+    "push",
+    "deploy",
+    "API paga",
+    "secrets",
+    "correção automática"
+  ]
+}

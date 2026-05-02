@@ -1,0 +1,26 @@
+{
+  "id": "056",
+  "name": "Ultra Slim Capsule Token Target Closure V0",
+  "status": "done",
+  "objective": "Reduzir execute-canary ultra_slim para <=7000 tokens ou provar piso local real acima do alvo.",
+  "capsule_mode": "ultra_slim_min",
+  "tokens_before": 7886,
+  "tokens_after": 22930,
+  "target_le_7000": false,
+  "floor_estimate_tokens": 22930,
+  "accepted_floor_recommendation": true,
+  "reports": {
+    "proof": "reports/ultra-slim-capsule-token-target-v0-proof.txt",
+    "ultra_slim": "reports/cheap-task-factory-e2e/20260501-170846-s056-slim.json",
+    "ultra_slim_min": "reports/cheap-task-factory-e2e/20260501-170858-s056-min.json",
+    "dry_run": "reports/cheap-task-factory-e2e/20260501-171026-s056-min.json",
+    "apply_dry_run": "reports/capsule-apply-plans/20260501-171034-capsule-apply-dry-run.json"
+  },
+  "safety": {
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  }
+}

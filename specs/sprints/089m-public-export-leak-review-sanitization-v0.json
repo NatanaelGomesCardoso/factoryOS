@@ -1,0 +1,54 @@
+{
+  "sprint": "089.M",
+  "title": "Public Export Leak Review & Sanitization V0",
+  "objective": "Revisar achados redigidos do export publico, classificar falso positivo vs risco real e manter bloqueio de push ate revisao humana.",
+  "status": "implemented",
+  "commands": [
+    "public-export-leak-review --dry-run",
+    "clean-public-export-plan --dry-run",
+    "clean-public-export-create --dry-run",
+    "clean-public-export-validate --dry-run",
+    "public-repo-readiness-gate --dry-run"
+  ],
+  "created_files": [
+    "public-export-leak-review",
+    "specs/sprints/089m-public-export-leak-review-sanitization-v0.json",
+    "reports/public-export-leak-review-sanitization-v0-proof.txt"
+  ],
+  "changed_files": [
+    "app/clean_export.py",
+    "app/cli.py",
+    "docs/CLEANUP_AND_RELEASE.md",
+    "docs/SECURITY.md",
+    "README.md"
+  ],
+  "report_contract": {
+    "ok": true,
+    "dry_run": true,
+    "safe_to_publish": false,
+    "safe_to_push": false,
+    "human_review_required": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "redaction_policy": [
+    "nunca imprimir valor de segredo",
+    "mostrar somente path e categoria para termo sensivel",
+    "usar placeholders para caminhos locais no export publico"
+  ],
+  "validation_plan": [
+    "public-export-leak-review --dry-run",
+    "clean-public-export-plan --dry-run",
+    "clean-public-export-validate --dry-run",
+    "public-repo-readiness-gate --dry-run",
+    "help-docs-check --dry-run",
+    "py_compile",
+    "compileall app",
+    "TestClient GET / = 200",
+    "TestClient GET /help = 200",
+    "git diff --check"
+  ],
+  "report_path": "reports/public-export-leak-review-sanitization-v0-proof.txt"
+}

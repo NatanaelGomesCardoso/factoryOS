@@ -1,0 +1,121 @@
+{
+  "id": "sprint-019-factory-state-hygiene-v0",
+  "title": "Factory State Hygiene V0",
+  "status": "planned",
+  "goal": "Implementar auditoria local, plano conservador e aplicação segura para tasks/runs antigas em running, reduzindo ambiguidade sem apagar dados, sem remover worktrees e sem executar Codex live.",
+  "features": [
+    {
+      "id": "feat-state-hygiene-001",
+      "title": "Auditar tasks e runs antigas",
+      "status": "planned",
+      "files": [
+        "app/state_hygiene.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-state-audit retorna JSON",
+        "factory-state-audit lista contagens de tasks e runs por estado",
+        "factory-state-audit lista tasks running antigas",
+        "factory-state-audit lista runs running antigas",
+        "factory-state-audit cruza task_id e run_id quando possível",
+        "factory-state-audit verifica proofs/reports locais",
+        "factory-state-audit gera report em reports/factory-state-hygiene/"
+      ]
+    },
+    {
+      "id": "feat-state-hygiene-002",
+      "title": "Gerar plano conservador e aplicar apenas safe_to_close",
+      "status": "planned",
+      "files": [
+        "app/state_hygiene.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-state-plan classifica itens como safe_to_close, needs_review ou blocked",
+        "factory-state-plan não muta nada",
+        "factory-state-apply --dry-run mostra apenas o que seria fechado",
+        "factory-state-apply --execute fecha apenas itens safe_to_close",
+        "factory-state-apply nunca apaga arquivos",
+        "factory-state-apply nunca remove worktrees",
+        "factory-state-apply nunca toca branch",
+        "factory-state-apply nunca executa Codex live"
+      ]
+    },
+    {
+      "id": "feat-state-hygiene-003",
+      "title": "Exibir o último hygiene report no painel",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html"
+      ],
+      "acceptanceCriteria": [
+        "o painel mostra running_tasks_count e running_runs_count",
+        "o painel mostra safe_to_close_count, needs_review_count e blocked_count",
+        "o painel oferece link para o último report",
+        "o painel continua read-only"
+      ]
+    },
+    {
+      "id": "feat-state-hygiene-004",
+      "title": "Registrar discovery, PRD, SPEC, sprint JSON e proof",
+      "status": "planned",
+      "files": [
+        "specs/discovery/reuse-first-factory-state-hygiene-v0.md",
+        "specs/prd/factory-state-hygiene-v0-prd.md",
+        "specs/technical-spec/factory-state-hygiene-v0.md",
+        "specs/sprints/019-factory-state-hygiene-v0.json",
+        "reports/factory-state-hygiene-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o discovery registra Reuse First",
+        "o PRD descreve problema, objetivo, fluxo e critérios de fechamento seguro",
+        "a SPEC documenta comandos, modelo de report e plano de fechamento",
+        "o sprint JSON lista features, validações, riscos e fora de escopo",
+        "o proof final registra comandos, reports e validações"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/019-factory-state-hygiene-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli factory-state-audit",
+    ".venv/bin/python -m json.tool reports/factory-state-hygiene/<timestamp>-audit.json",
+    ".venv/bin/python -m app.cli factory-state-plan",
+    ".venv/bin/python -m json.tool reports/factory-state-hygiene/<timestamp>-plan.json",
+    ".venv/bin/python -m app.cli factory-state-apply --dry-run",
+    ".venv/bin/python -m json.tool reports/factory-state-hygiene/<timestamp>-apply.json",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; TestClient(app, base_url='http://127.0.0.1').get('/')\"",
+    "git diff --check",
+    "git worktree list"
+  ],
+  "risks": [
+    "classificar item errado como safe_to_close pode encerrar trabalho ainda ativo",
+    "report antigo pode existir sem prova suficiente",
+    "o painel precisa continuar read-only",
+    "a sprint atual não deve entrar no plano de higiene"
+  ],
+  "out_of_scope": [
+    "deletar arquivos",
+    "remover worktrees",
+    "executar live",
+    "merge",
+    "rebase",
+    "fetch",
+    "pull",
+    "limpar branches",
+    "deploy",
+    "API paga",
+    "secrets",
+    "GitHub",
+    "Linear",
+    "MCP",
+    "daemon",
+    "scheduler"
+  ]
+}

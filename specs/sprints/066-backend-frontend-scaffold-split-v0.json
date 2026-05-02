@@ -1,0 +1,25 @@
+{
+  "id": "066",
+  "name": "Backend Frontend Scaffold Split V0",
+  "status": "planned",
+  "objective": "Garantir que o scaffold de workspace crie backend e frontend com fronteira explícita.",
+  "command": "project-workspace-scaffold",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/backend-frontend-scaffold-split-v0-proof.txt",
+    "generated": [
+      "docs/backend-frontend-scaffold-split.md",
+      "specs/discovery/reuse-first-backend-frontend-scaffold-split-v0.md",
+      "specs/prd/backend-frontend-scaffold-split-v0-prd.md",
+      "specs/technical-spec/backend-frontend-scaffold-split-v0.md"
+    ]
+  }
+}
+

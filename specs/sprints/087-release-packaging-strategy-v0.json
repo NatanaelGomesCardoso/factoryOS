@@ -1,0 +1,48 @@
+{
+  "sprint": "087",
+  "title": "Release Packaging Strategy V0",
+  "objective": "Criar estrategia formal e segura para backup e release limpo do FactoryOS sem publicar.",
+  "status": "implemented",
+  "commands": [
+    "release-packaging-strategy --dry-run"
+  ],
+  "created_files": [
+    "app/release_packaging.py",
+    "docs/release-packaging-strategy.md",
+    "specs/sprints/087-release-packaging-strategy-v0.json",
+    "reports/release-packaging-strategy-v0-proof.txt"
+  ],
+  "changed_files": [
+    "app/cli.py"
+  ],
+  "decision_contract": {
+    "strategy_decision": [
+      "ready",
+      "needs_review",
+      "failed"
+    ],
+    "human_review_required": true,
+    "push_allowed": false,
+    "safe_to_publish": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "release_policy": {
+    "backup": "branch/tag local recomendada antes de qualquer export publico",
+    "export": "<FACTORYOS_CLEAN_EXPORT>",
+    "history_rewrite_allowed": false,
+    "delete_current_reports_allowed": false,
+    "github_push_allowed": false
+  },
+  "validation_plan": [
+    "py_compile",
+    "compileall app",
+    "json.tool specs/sprints/087-release-packaging-strategy-v0.json",
+    "release-packaging-strategy --dry-run",
+    "git diff --check",
+    "harness security-doctor --source-root <FACTORYOS_ROOT> --strict"
+  ],
+  "report_path": "reports/release-packaging-strategy-v0-proof.txt"
+}

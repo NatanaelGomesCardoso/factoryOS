@@ -1,0 +1,93 @@
+{
+  "id": "sprint-025-factory-start-evaluated-run-v0",
+  "title": "Factory Start Evaluated Run V0",
+  "status": "planned",
+  "goal": "Integrar factory-start ao evaluator para gerar execução avaliada em dry-run e live canary bounded, consolidando a decisão final sem loop longo.",
+  "features": [
+    {
+      "id": "feat-factory-start-025-001",
+      "title": "Avaliar factory-start dry-run automaticamente",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/execution_evaluator.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-start --dry-run --evaluate gera report do start e evaluation report",
+        "dry-run avaliado não retorna passed falso",
+        "report final expõe evaluation_report, evaluation_decision, final_decision e final_status"
+      ]
+    },
+    {
+      "id": "feat-factory-start-025-002",
+      "title": "Avaliar live canary bounded automaticamente",
+      "status": "planned",
+      "files": [
+        "app/factory_start.py",
+        "app/execution_evaluator.py",
+        "app/report_index.py"
+      ],
+      "acceptanceCriteria": [
+        "factory-start --live --canary --evaluate roda uma vez",
+        "decision final só vira passed se evaluator passar",
+        "master permanece intacto e changed_files fica restrito ao arquivo permitido"
+      ]
+    },
+    {
+      "id": "feat-factory-start-025-003",
+      "title": "Expor resultado avaliado no painel e na documentação",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "specs/discovery/reuse-first-factory-start-evaluated-run-v0.md",
+        "specs/prd/factory-start-evaluated-run-v0-prd.md",
+        "specs/technical-spec/factory-start-evaluated-run-v0.md",
+        "specs/sprints/025-factory-start-evaluated-run-v0.json",
+        "reports/factory-start-evaluated-run-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "painel mostra final_status, final_decision, evaluation_decision e executed_live",
+        "proof registra dry-run e live evaluated",
+        "painel continua read-only"
+      ]
+    }
+  ],
+  "validation": [
+    "git status --short --branch",
+    "git worktree list",
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/025-factory-start-evaluated-run-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-workspace-prepare <DRY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <DRY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <DRY_RUN_ID>",
+    ".venv/bin/python -m app.cli factory-start --dry-run --evaluate --run-id <DRY_RUN_ID> --max-steps 1",
+    ".venv/bin/python -m app.cli run-workspace-prepare <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-readiness <CANARY_RUN_ID>",
+    ".venv/bin/python -m app.cli run-workspace-sync-plan <CANARY_RUN_ID>",
+    "FACTORYOS_ENABLE_LIVE_CODEX=1 .venv/bin/python -m app.cli factory-start --live --canary --evaluate --run-id <CANARY_RUN_ID> --max-steps 1",
+    ".venv/bin/python -m app.cli factory-start --dry-run --evaluate --run-id ../oops --max-steps 1",
+    ".venv/bin/python -c \"from fastapi.testclient import TestClient; from app.web import app; print(TestClient(app, base_url='http://127.0.0.1').get('/').status_code)\"",
+    "git diff --check"
+  ],
+  "risks": [
+    "dry-run pode parecer mais forte do que realmente é se a decisão final não for conservadora",
+    "selector errado de source report invalida a avaliação",
+    "live canary precisa continuar estritamente bounded"
+  ],
+  "out_of_scope": [
+    "retry loop",
+    "loop longo",
+    "merge",
+    "push",
+    "deploy",
+    "API paga",
+    "secrets",
+    "scheduler",
+    "daemon"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "id": "sprint-011-codex-execution-handoff-v0",
+  "title": "Codex Execution Handoff V0",
+  "status": "planned",
+  "goal": "Preparar o handoff controlado para execução futura do Codex por run, com prompt gerado, command adapter, budgets, report local, dry-run padrão e live bloqueado por variável de ambiente.",
+  "features": [
+    {
+      "id": "feat-codex-handoff-001",
+      "title": "Montar handoff local por run",
+      "status": "planned",
+      "files": [
+        "app/codex_handoff.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-handoff exige uma run existente em running",
+        "run-handoff gera prompt local em reports/run-handoffs/",
+        "run-handoff gera report JSON local em reports/run-handoffs/",
+        "run_id e workspace_path são validados e path traversal é bloqueado"
+      ]
+    },
+    {
+      "id": "feat-codex-handoff-002",
+      "title": "Proteger execução live",
+      "status": "planned",
+      "files": [
+        "app/codex_handoff.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "run-execute sem flag roda em dry-run por padrão",
+        "run-execute --dry-run gera report sem executar Codex",
+        "run-execute --live falha sem FACTORYOS_ENABLE_LIVE_CODEX=1",
+        "run-execute usa subprocess seguro sem shell=True"
+      ]
+    },
+    {
+      "id": "feat-codex-handoff-003",
+      "title": "Expor último handoff no painel",
+      "status": "planned",
+      "files": [
+        "app/panel_data.py",
+        "app/templates/index.html",
+        "app/static/style.css"
+      ],
+      "acceptanceCriteria": [
+        "o painel continua read-only",
+        "o último handoff válido aparece no painel",
+        "o painel mostra prompt, report e comando montado",
+        "nenhuma ação de escrita ou execução é adicionada ao frontend"
+      ]
+    },
+    {
+      "id": "feat-codex-handoff-004",
+      "title": "Registrar prova e fechamento",
+      "status": "planned",
+      "files": [
+        "reports/codex-execution-handoff-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "o proof registra os comandos validados",
+        "o proof registra os reports gerados",
+        "o proof confirma que Codex real não foi executado",
+        "o proof documenta a pendência técnica do workspace vazio"
+      ]
+    }
+  ],
+  "validation": [
+    ".venv/bin/python -m py_compile app/*.py",
+    ".venv/bin/python -m compileall app",
+    ".venv/bin/python -m json.tool specs/sprints/011-codex-execution-handoff-v0.json",
+    ".venv/bin/python -m app.cli task-list",
+    ".venv/bin/python -m app.cli run-list",
+    ".venv/bin/python -m app.cli run-handoff <run-id>",
+    ".venv/bin/python -m app.cli run-execute <run-id> --dry-run",
+    ".venv/bin/python -m app.cli run-execute <run-id> --live",
+    "TestClient com base_url=http://127.0.0.1 e GET / retorna 200",
+    "git diff --check"
+  ],
+  "risks": [
+    "report e prompt podem ser sobrescritos para a mesma run",
+    "o caminho de execução live ainda é futuro e protegido por env var",
+    "o workspace atual pode continuar apenas como diretório vazio, exigindo decisão futura sobre git worktree"
+  ],
+  "out_of_scope": [
+    "loop",
+    "daemon",
+    "scheduler",
+    "App Server",
+    "MCP",
+    "integração GitHub",
+    "integração Linear",
+    "deploy",
+    "factory-start",
+    "execução real nos testes",
+    "worktree real nesta sprint"
+  ]
+}

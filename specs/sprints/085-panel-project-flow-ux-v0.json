@@ -1,0 +1,33 @@
+{
+  "sprint": "085-panel-project-flow-ux-v0",
+  "title": "Panel Project Flow UX V0",
+  "objective": "Melhorar como o painel mostra o fluxo de projeto/MVP e os gates humanos.",
+  "flow": [
+    "Intake",
+    "PRD",
+    "SPEC",
+    "Build Plan",
+    "Capsule Canary",
+    "Apply Gate",
+    "Workspace",
+    "Evaluator",
+    "Delivery",
+    "Obsidian",
+    "Release"
+  ],
+  "command": "panel-project-flow-check --dry-run",
+  "result": {
+    "project_flow_decision": "passed",
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "constraints": {
+    "no_real_project_execution": true,
+    "no_new_automation": true,
+    "read_only_panel": true,
+    "no_spa": true,
+    "no_external_dependencies": true
+  }
+}

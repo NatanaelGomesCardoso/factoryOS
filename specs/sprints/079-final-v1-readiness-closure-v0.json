@@ -1,0 +1,58 @@
+{
+  "id": "079",
+  "title": "Final V1 Readiness Closure V0",
+  "status": "planned",
+  "goal": "Criar o fechamento formal de prontidão V1 antes do technical freeze.",
+  "features": [
+    {
+      "id": "feat-readiness-closure-001",
+      "title": "Adicionar readiness closure V1 em dry-run",
+      "status": "planned",
+      "files": [
+        "app/v1_closure.py",
+        "app/cli.py",
+        "app/report_index.py"
+      ],
+      "acceptanceCriteria": [
+        "factoryos-v1-readiness-closure existe",
+        "factoryos-v1-readiness-closure aceita --dry-run",
+        "o report retorna closure_decision",
+        "human_review_required=true",
+        "technical_freeze_allowed=true somente sem blockers críticos",
+        "executed_live=false"
+      ]
+    },
+    {
+      "id": "feat-readiness-closure-002",
+      "title": "Registrar documentação e proof do closure",
+      "status": "planned",
+      "files": [
+        "docs/factoryos-v1-readiness-closure.md",
+        "specs/sprints/079-final-v1-readiness-closure-v0.json",
+        "reports/final-v1-readiness-closure-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "documentação lista os gates consolidados",
+        "proof registra decisão e safety flags",
+        "próximos passos pós-080 ficam explícitos"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m app.cli factoryos-v1-readiness-closure --dry-run",
+    "python -m json.tool specs/sprints/079-final-v1-readiness-closure-v0.json",
+    "python -m py_compile app/v1_closure.py app/cli.py app/report_index.py",
+    "git diff --check"
+  ],
+  "risks": [
+    "checks consolidados geram novos reports em dry-run"
+  ],
+  "out_of_scope": [
+    "technical freeze",
+    "redesign de UI",
+    "limpeza destrutiva",
+    "push",
+    "deploy",
+    "API paga"
+  ]
+}

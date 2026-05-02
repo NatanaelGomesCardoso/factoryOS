@@ -1,0 +1,60 @@
+{
+  "id": "073",
+  "title": "First Project Pilot Runbook V0",
+  "status": "planned",
+  "goal": "Criar um runbook prático para iniciar o primeiro projeto piloto usando FactoryOS com pontos claros de aprovação humana.",
+  "features": [
+    {
+      "id": "feat-first-project-pilot-runbook-001",
+      "title": "Montar o runbook operacional",
+      "status": "planned",
+      "files": [
+        "app/project_pilot_runbook.py",
+        "app/cli.py"
+      ],
+      "acceptanceCriteria": [
+        "project-pilot-runbook-create existe",
+        "project-pilot-runbook-create aceita --project e --dry-run",
+        "o report tem ok=true",
+        "o report tem dry_run=true",
+        "o report tem human_review_required=true",
+        "o report marca no_push/no_deploy/no_paid_api/no_secrets=true"
+      ]
+    },
+    {
+      "id": "feat-first-project-pilot-runbook-002",
+      "title": "Registrar docs e specs",
+      "status": "planned",
+      "files": [
+        "docs/first-project-pilot-runbook.md",
+        "specs/discovery/reuse-first-first-project-pilot-runbook-v0.md",
+        "specs/prd/first-project-pilot-runbook-v0-prd.md",
+        "specs/technical-spec/first-project-pilot-runbook-v0.md",
+        "specs/sprints/073-first-project-pilot-runbook-v0.json",
+        "reports/first-project-pilot-runbook-v0-proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "os artefatos descrevem a sequência do fluxo",
+        "os pontos de aprovação humana aparecem de forma explícita",
+        "push, deploy, API paga e secrets aparecem como nunca automático"
+      ]
+    }
+  ],
+  "validation": [
+    "python -m py_compile app/*.py",
+    "python -m json.tool specs/sprints/073-first-project-pilot-runbook-v0.json",
+    "project-pilot-runbook-create --project demo-simple-web-mvp-safe-split --dry-run"
+  ],
+  "risks": [
+    "o runbook precisa continuar observável e sem efeitos colaterais",
+    "a sequência não pode sugerir push ou deploy automático",
+    "o report deve permanecer local e auditável"
+  ],
+  "out_of_scope": [
+    "push",
+    "deploy",
+    "API paga",
+    "secrets",
+    "execução live automática"
+  ]
+}

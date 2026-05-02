@@ -1,0 +1,25 @@
+{
+  "id": "067",
+  "name": "MVP Validation Evaluator V0",
+  "status": "planned",
+  "objective": "Criar uma avaliação estruturada para workspaces MVP e gerar decisão final local.",
+  "command": "mvp-evaluate",
+  "safety": {
+    "dry_run": true,
+    "executed_live": false,
+    "no_push": true,
+    "no_deploy": true,
+    "no_paid_api": true,
+    "no_secrets": true
+  },
+  "reports": {
+    "proof": "reports/mvp-validation-evaluator-v0-proof.txt",
+    "generated": [
+      "docs/mvp-validation-evaluator.md",
+      "specs/discovery/reuse-first-mvp-validation-evaluator-v0.md",
+      "specs/prd/mvp-validation-evaluator-v0-prd.md",
+      "specs/technical-spec/mvp-validation-evaluator-v0.md"
+    ]
+  }
+}
+

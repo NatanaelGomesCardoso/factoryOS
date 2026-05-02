@@ -1,0 +1,37 @@
+{
+  "sprint": 29,
+  "title": "Codex Dynamic Skill Router V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Criar roteador local de contexto/skills",
+    "Gerar context pack compacto por task/run",
+    "Reduzir prompt gigante desnecessário",
+    "Integrar context pack ao run-handoff",
+    "Preservar skills e configuração global"
+  ],
+  "reuse_first": [
+    "codex_profile",
+    "codex_handoff",
+    "report_index",
+    "specs por sprint"
+  ],
+  "out_of_scope": [
+    "alterar ~/.codex",
+    "remover plugins",
+    "mexer no harness global",
+    "executar live"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/029-codex-dynamic-skill-router-v0.json",
+    "codex-context --task-id",
+    "codex-context --run-id",
+    "path traversal em codex-context",
+    "run-handoff inclui context pack",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

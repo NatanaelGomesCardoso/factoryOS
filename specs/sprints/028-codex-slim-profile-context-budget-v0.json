@@ -1,0 +1,38 @@
+{
+  "sprint": 28,
+  "title": "Codex Slim Profile & Context Budget V0",
+  "status": "done",
+  "risk": "high",
+  "executor": "manual",
+  "objectives": [
+    "Criar política local de perfis Codex",
+    "Estimar budget de contexto por task/run",
+    "Gerar plano Codex antes de execução",
+    "Integrar perfil e budget ao run-handoff",
+    "Preservar configuração global do Codex"
+  ],
+  "reuse_first": [
+    "run budget existente",
+    "codex_handoff",
+    "factory_start",
+    "reports"
+  ],
+  "out_of_scope": [
+    "alterar ~/.codex/config.toml",
+    "remover skills",
+    "mexer no harness global",
+    "executar live"
+  ],
+  "validation": [
+    "py_compile app/*.py",
+    "compileall app",
+    "json.tool specs/sprints/028-codex-slim-profile-context-budget-v0.json",
+    "codex-profile-list",
+    "codex-plan --task-id",
+    "codex-plan --run-id",
+    "run-handoff dry-run seguro",
+    "path traversal em codex-plan",
+    "TestClient GET / = 200",
+    "git diff --check"
+  ]
+}

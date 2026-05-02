@@ -1,0 +1,31 @@
+{
+  "id": "sprint-001-local-router",
+  "title": "Validar roteador local antes do Codex",
+  "status": "done-in-lab",
+  "goal": "Provar que Python + Ollama conseguem classificar tarefas simples antes de chamar Codex.",
+  "features": [
+    {
+      "id": "feat-001",
+      "title": "Criar roteador local de tarefas",
+      "status": "done-in-lab",
+      "files": [
+        "lab/local_task_router.py",
+        "lab/ROUTER_PROOF.md",
+        "lab/local_task_router_proof.txt"
+      ],
+      "acceptanceCriteria": [
+        "docs_readme retorna local_only",
+        "small_bugfix retorna codex_needed",
+        "auth_security retorna human_review",
+        "frontend_copy retorna local_only",
+        "python3 -m py_compile lab/local_task_router.py passa"
+      ],
+      "verification": {
+        "commands": [
+          "python3 -m py_compile lab/local_task_router.py",
+          "python3 lab/local_task_router.py"
+        ]
+      }
+    }
+  ]
+}
