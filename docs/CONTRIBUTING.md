@@ -55,3 +55,8 @@ feat: add complete documentation and local help center v0
 4. Adicione validação.
 5. Atualize `docs/COMMANDS.md`.
 6. Se aparecer no painel, mantenha read-only e sem secrets.
+
+
+## Licença e atribuição
+
+Ao contribuir, mantenha avisos de licença, créditos de terceiros e referências a projetos externos. Integrações opcionais, como Reversa, devem permanecer claramente atribuídas ao projeto original.

@@ -58,3 +58,14 @@ flowchart LR
 - Fazer deploy.
 - Ler ou mover secrets.
 - Alterar projeto de outra pessoa sem relatório e aprovação.
+
+
+## Créditos e licença
+
+Reversa é um projeto independente criado por `sandeco`.
+
+- Repositório: https://github.com/sandeco/reversa
+- Licença: MIT
+- Uso no FactoryOS: integração opcional via CLI/package externo.
+
+FactoryOS não vende, modifica ou redistribui o Reversa como código próprio. A integração apenas orquestra checks, planos, status e intake seguro para projetos dentro de `<CODE_ROOT>`.

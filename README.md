@@ -95,4 +95,8 @@ Leia [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md). Mudanças devem ser pequenas,
 
 ## Licença
 
-License: TBD.
+FactoryOS é distribuído sob a licença MIT. Veja [LICENSE](LICENSE).
+
+## Créditos
+
+FactoryOS possui integração opcional com o [Reversa](https://github.com/sandeco/reversa), criado por `sandeco`, para apoiar engenharia reversa de especificações em projetos legados. O Reversa é um projeto independente sob licença MIT. Veja [NOTICE.md](NOTICE.md).
